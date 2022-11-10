@@ -4,8 +4,6 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import sortUp from '../../images/sortUpDown.png'
 import sortDown from '../../images/sortDownUp.png'
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { VIEW_CTC } from '../../Constants';
 
 function Search(){
 
