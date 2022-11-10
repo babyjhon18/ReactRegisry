@@ -1,0 +1,33 @@
+div {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.left-panel-div{
+    height: 93vh;
+    background-color: rgba(242, 242, 242, 0.668);
+} 
+
+.class-buttons {
+    background-color: #567796;
+    border-radius: 0px;
+    padding: 15px;
+    color: white;
+    text-align: center;
+    display: inline-block;
+    font-size: 20px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.class-buttons:hover {
+    background-color: #377AB7;
+    border-radius: 0px;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 20px;
+    cursor: pointer;
+}

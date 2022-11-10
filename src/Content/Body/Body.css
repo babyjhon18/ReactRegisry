@@ -1,0 +1,69 @@
+#bar{
+  position: absolute;
+}
+#bar .closemenu {
+  color: #377AB7;
+  line-height: 20px;
+  font-size: 20px;
+  top: 55px;
+  cursor: pointer;
+  margin: 10px;
+}
+#bar .pro-sidebar {
+  width: 100%;
+  min-width: 35%;
+  height: 90vh;
+}
+#bar .pro-sidebar.collapsed {
+  width: 35%;
+  min-width: 35%;
+}
+#bar .pro-sidebar-inner {
+  background-color: rgba(242, 242, 242);
+  box-shadow: 0.5px 0.866px 2px 0px rgba(0, 0, 0, 0.15);
+}
+#bar .pro-sidebar-inner .pro-sidebar-layout {
+  overflow-y: hidden;
+}
+#bar .pro-sidebar-inner .pro-sidebar-layout ul {
+  padding: 0px;
+}
+#bar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item {
+  color:rgba(0, 0, 0, 0.65);
+  font-weight: normal;
+  text-align: start;
+}
+#bar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper {
+  background-color: #377AB7;
+  color: white;
+  border-radius: 50%;
+}
+#bar .pro-sidebar-inner .pro-sidebar-layout ul .pro-inner-item .pro-icon-wrapper .pro-item-content {
+  color: #000;
+}
+#bar .pro-sidebar-content{
+  width: 100%;
+}
+#bar .pro-sidebar-inner .pro-sidebar-layout .active {
+  background-color: #3779b78d;
+}
+#mainBody{
+  position: sticky;
+  padding: 10px;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  height: 90vh;
+  padding-top: 0px;
+  margin-left: 90px;
+  padding-right: 25px;
+}
+#mainBody #row{
+  background-color: white;
+  padding-top: 10px;
+  position: sticky;
+  top: 0; 
+}
+#list{ 
+  padding-left: 90px;
+}
+
