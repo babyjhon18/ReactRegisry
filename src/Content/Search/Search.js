@@ -3,9 +3,16 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 import sortUp from '../../images/sortUpDown.png'
 import sortDown from '../../images/sortDownUp.png'
-import React from 'react';
+import {React, useState, useEffect} from 'react';
+import { useSelector } from 'react-redux';
 
 function Search(){
+
+    const [searchItems, setSearchItems] = useState([]);
+    const c = useSelector(state => state.contract);
+    useEffect(() => {
+        console.log(c.contracts);
+    });
 
     const sortClick = event => {
         event.target.src === sortUp ? event.target.src = sortDown : event.target.src = sortUp;
