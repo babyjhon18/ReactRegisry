@@ -44,7 +44,7 @@ function Body() {
 
   const getData = async (link) => {
     await axios.get(link).then((response) => {
-      dispatch({type: UPDATE_CTC_VIEW, payload: response.data})
+      dispatch({type: UPDATE_CTC_VIEW, payload: response.data, link: link, header: header})
     });
     setItems(c.contracts.contracts);
   };

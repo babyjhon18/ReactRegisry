@@ -1,9 +1,20 @@
-import { VIEW_CTC, EDIT_CTC, DELETE_CTC, SEARCH_CTC } from "../Constants"
+import { VIEW_CTC, UPDATE_CTC_VIEW,EDIT_CTC, DELETE_CTC, SEARCH_CTC } from "../Constants"
 
-export function ViewContracts(contractList){
+export function ViewContracts(contractList, link, header){
     return {
         type: VIEW_CTC,
-        payload: contractList
+        payload: contractList,
+        link: link, 
+        header: header
+    }
+}
+
+export function UpdateViewContracts(contractList, link, header){
+    return {
+        type: UPDATE_CTC_VIEW,
+        payload: contractList,
+        link: link, 
+        rowHeader: header
     }
 }
 
