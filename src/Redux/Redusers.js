@@ -27,13 +27,11 @@ export function contractReduser(state = contractState, action){
             state.contracts = action.payload;
             return state;            
         case EDIT_CTC:
-            const contract = state.contracts.findIndex(ctc => ctc.id === action.payload);
             return state;
         case DELETE_CTC:
-            const filteredCounters = state.filter(ctc => ctc.id === action.payload);
-            return {...state, filteredCounters};
+            return state;
         case SEARCH_CTC:
-            
+            state.contracts = action.payload;
             return state;
         default: 
             return state;
