@@ -32,9 +32,11 @@ export function DeleteContract(contractId){
     }
 }
 
-export function SearchContract(keyWord){
+export function SearchContract(contracts, keyword, index){
     return {
         type: SEARCH_CTC,
-        payload: keyWord
+        keyword: keyword,
+        index: index,
+        contracts: contracts
     }
 }

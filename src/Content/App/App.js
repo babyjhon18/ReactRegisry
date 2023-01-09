@@ -1,14 +1,14 @@
 import './App.css';
 import MainPage from '../MainPage/MainPage.js'
-import { connect } from 'react-redux';
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
+import {useSelector} from 'react-redux';
 
-class App extends Component {
-  render(){
+function App(){
+    const contracts = useSelector(state => state.contractReduser);
+    useEffect(()=>{console.log(contracts)},[contracts])
     return (
-        <MainPage/>
+        <MainPage contract={contracts} />
     );
-  }
 }
 
 export default App;

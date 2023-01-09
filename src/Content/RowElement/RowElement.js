@@ -30,27 +30,27 @@ function RowElement(props){
 
     return (
         <div className="col-lg-12" id="mainDiv">
-            <div className="col-lg-2">
+            <div className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2">
                 {props.contract.description}
             </div>
-            <div className="col-lg-1">
+            <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1">
                 {props.contract.contractNumber}
             </div>
-            <div className="col-lg-1">
+            <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1">
                 {date}
             </div>
-            <div className="col-lg-1">
+            <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1">
                 {props.contract.amount}
             </div>
-            <div className="col-lg-1">
+            <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1">
                 {props.contract.percent}
             </div>
-            <div className="col-lg-1">
+            <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1">
                 {props.contract.deadlineCondition}
             </div>
-            <img className="col-lg-1" id="statusImg" src={signature}></img>
-            <img className="col-lg-1" id="statusImg" src={ready}></img>
-            <img className="col-lg-1" id="statusImg" src={ourDelivery}></img>
+            <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" id="statusImg" src={signature}></img>
+            <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" id="statusImg" src={ready}></img>
+            <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" id="statusImg" src={ourDelivery}></img>
         </div>
     )
 }

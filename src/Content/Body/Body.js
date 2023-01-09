@@ -23,16 +23,15 @@ import { jsonHeaderRegistry, jsonHeaderWorkPlan, UPDATE_CTC_VIEW } from '../../C
 
 function Body() {  
 
-  useEffect(() => {
-    fetchData('http://37.17.58.180:8087/api/Contracts', 0, jsonHeaderRegistry);
-  }, []);
-
   const [menuCollapse, setMenuCollapse] = useState(true);
   const [activate, setMenuActivate] = useState(0);
   const [header, setHeader] = useState(jsonHeaderRegistry);
-  const [items, setItems] = useState();
   const dispatch = useDispatch();
-  const c = useSelector(state => state.contract);
+  const c = useSelector(state => state.contractReduser);
+
+  useEffect(() => {
+    fetchData('http://37.17.58.180:8087/api/Contracts', 0, jsonHeaderRegistry);
+  }, []);
 
   const onMouseOn = () => {
     setMenuCollapse(false);
@@ -46,7 +45,6 @@ function Body() {
     await axios.get(link).then((response) => {
       dispatch({type: UPDATE_CTC_VIEW, payload: response.data, link: link, header: header})
     });
-    setItems(c.contracts.contracts);
   };
 
   const fetchData = (link, index, header) => {
@@ -76,7 +74,7 @@ function Body() {
         <div id="row" className='row'>
           <RowHeader contract={header}></RowHeader>
         </div>  
-            {items && items.map((contract, index) =>
+            {c.searchedContracts && c.searchedContracts.map((contract, index) =>
               (
                 <div className='row'>
                   <RowElement key={index} contract={contract.contract}></RowElement>

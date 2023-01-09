@@ -1,8 +1,8 @@
-import { contractReduser } from "./Redusers";
+import { contractReduser } from "./ContractReduser";
 import { combineReducers, createStore } from "redux";
 
 const rootReduser = combineReducers({
-    contract: contractReduser,
+    contractReduser: contractReduser,
 })
 
 export const store = createStore(rootReduser);

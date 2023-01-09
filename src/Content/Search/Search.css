@@ -111,10 +111,14 @@ button:hover{
 
 #searchButton{
     background-color: #377AB7;
-    border: 2px solid #377AB7; 
+    border: 2px solid #377AB7;
+    border-radius: 5px 0px 0px 5px;
+    color: white; 
 }
 
 #searchButton:hover{
     background-color: #1f62a1;
     border: 2px solid #1f62a1; 
+    border-radius: 5px 0px 0px 5px;
+    color: white;
 }
