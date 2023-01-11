@@ -23,11 +23,12 @@ import { jsonHeaderRegistry, jsonHeaderWorkPlan, UPDATE_CTC_VIEW } from '../../C
 
 function Body() {  
 
+  const c = useSelector(state => state.contractReduser);
+
   const [menuCollapse, setMenuCollapse] = useState(true);
   const [activate, setMenuActivate] = useState(0);
   const [header, setHeader] = useState(jsonHeaderRegistry);
   const dispatch = useDispatch();
-  const c = useSelector(state => state.contractReduser);
 
   useEffect(() => {
     fetchData('http://37.17.58.180:8087/api/Contracts', 0, jsonHeaderRegistry);

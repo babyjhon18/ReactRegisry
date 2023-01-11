@@ -4,6 +4,7 @@ export const UPDATE_CTC_VIEW = "UPDATE_CTC_VIEW"
 export const EDIT_CTC = "EDIT_CTC"; 
 export const DELETE_CTC = "DELETE_CTC";
 export const SEARCH_CTC = "SEARCH_CTC";
+export const SORT_CTC = "SORT_CTC";
 //Payments
 export const VIEW_PAYM = "VIEW_PAYM";
 export const ADD_PAYM = "ADD_PAYM"; 

@@ -1,4 +1,4 @@
-import { VIEW_CTC, UPDATE_CTC_VIEW,EDIT_CTC, DELETE_CTC, SEARCH_CTC } from "../Constants"
+import { VIEW_CTC, UPDATE_CTC_VIEW,EDIT_CTC, DELETE_CTC, SEARCH_CTC, SORT_CTC } from "../Constants"
 
 export function ViewContracts(contractList, link, header){
     return {
@@ -38,5 +38,12 @@ export function SearchContract(contracts, keyword, index){
         keyword: keyword,
         index: index,
         contracts: contracts
+    }
+}
+
+export function Sort(sortDirection){
+    return {
+        type: SORT_CTC,
+        sortDirection: sortDirection
     }
 }

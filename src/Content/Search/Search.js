@@ -5,7 +5,7 @@ import sortUp from '../../images/sortUpDown.png'
 import sortDown from '../../images/sortDownUp.png'
 import {React, useState, useEffect} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SEARCH_CTC } from '../../Constants';
+import { SEARCH_CTC, SORT_CTC } from '../../Constants';
 
 function Search(){
 
@@ -15,7 +15,14 @@ function Search(){
     const [searchInputValue, setSearchInputValue] = useState("");
 
     const sortClick = event => {
-        event.target.src === sortUp ? event.target.src = sortDown : event.target.src = sortUp;
+        if(event.target.src === sortUp)  {
+            event.target.src = sortDown;
+            dispatch({type: SORT_CTC, sortDirection: true})
+        }
+        else{
+            event.target.src = sortUp;
+            dispatch({type: SORT_CTC, sortDirection: false})
+        }    
     }
 
     const searchFieldChange = event => {
@@ -49,6 +56,10 @@ function Search(){
         }
     }
 
+    const DateChange = () => {
+
+    }
+
     return (<div className='divLogo'>
         <div>
             <input className='searchContractInput' onChange={searchFieldChange} 
@@ -68,11 +79,11 @@ function Search(){
         </div>
         <div>
             С:
-            <input type='date' className='datetime-pickers'></input>
+            <input type='date' className='datetime-pickers' onChange={DateChange}></input>
         </div>
         <div>
             по:
-            <input type='date' className='datetime-pickers'></input>
+            <input type='date' className='datetime-pickers' onChange={DateChange}></input>
         </div>
         <div class="sortBtn">
             <img onClick={sortClick} src={sortUp}></img>
