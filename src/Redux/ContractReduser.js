@@ -17,7 +17,7 @@ const contractState = {
     link: 'http://37.17.58.180:8087/api/Contracts',
     header: jsonHeaderRegistry,
     contracts: getContracts('http://37.17.58.180:8087/api/Contracts'),
-    searchedContracts: contracts
+    searchedContracts: contracts,
 } 
 
 export function contractReduser(state = contractState, action){

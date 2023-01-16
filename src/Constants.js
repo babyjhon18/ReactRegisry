@@ -20,6 +20,7 @@ export const jsonHeaderRegistry = {
     id:1,
     notes:"",
     description:"Наименование договора",
+    client:"Заказчик",
     contractNumber:"Номер договора",
     contractDate:"Дата договора",
     clientId:1,
@@ -37,7 +38,8 @@ export const jsonHeaderRegistry = {
   export const jsonHeaderWorkPlan = {
     id:1,
     notes:"",
-    description:"Наименование договора bobr",
+    description:"Наименование договора bobra",
+    client:"Заказчик",
     contractNumber:"Номер договора",
     contractDate:"Дата договора",
     clientId:1,

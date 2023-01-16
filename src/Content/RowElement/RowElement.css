@@ -1,14 +1,18 @@
 #mainDiv{
-    position: static;
     cursor: default;
     display: flex;
     box-shadow: 0px 1px 0px 0px #d9d9d9;
     margin: 2px;
     background-color: rgb(251, 251, 251);
     border-radius: 0px;
-    height: 45px;
-    color: rgba(0, 0, 0, 0.65);;
+    height: 50px;
+    color: rgba(0, 0, 0, 0.65);
 }
+
+.zindex{
+    z-index: 0;
+}
+
 #mainDiv:hover{
     background-color: rgba(0, 0, 0, 0.06);
     box-shadow: 0px 1px 0px 0px #3779b78d;
@@ -34,13 +38,28 @@
     padding: 8px;
 }
 #statusImg{
-    margin-right: 70px;
-    width: 45px;
-    height: 45px;
+    margin-right: 50px;
+    width: 50px;
+    height: 50px;
 }
-.mpopup {
+
+#aboutImg{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    margin: auto;
+}
+
+#specImg{
+    width: 40px;
+    height: 40px;
+    margin: auto;
+}
+
+.mPopupSpecification {
     display: none;
     position: fixed;
+    z-index: 1;
     padding-top: 100px;
     left: 0;
     top: 0;
@@ -49,47 +68,81 @@
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
 }
-.modal-content {
-    background-color: #fff;
-    margin: auto;
-    padding: 0;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
-    -webkit-animation-name: animatetop;
-    -webkit-animation-duration: 0.4s;
-    animation-name: animatetop;
-    animation-duration: 0.4s;
-    border-radius: 0.3rem;
-}
-.modal-header {
-    padding: 2px 12px;
-    background-color: #ffffff;
-    color: #333;
-    border-bottom: 1px solid #e9ecef;
-    border-top-left-radius: 0.3rem;
-    border-top-right-radius: 0.3rem;
-}
-.modal-header h2{
-    font-size: 1.25rem;
-    margin-top: 14px;
-    margin-bottom: 14px;
-}
+
 .modal-body {
     padding: 2px 12px;
     background-color: white;
 }
-.close {
-    color: #888;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
+
+.specification-table{
+    padding: 10px;
+    margin: auto;
+    color: #377AB7;
 }
-.close:hover, .close:focus {
-    color: #000;
-    text-decoration: none;
+
+.modal-background{
+    position: relative;
+    padding: 0;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.3s;
+    animation-name: animatetop;
+    animation-duration: 0.3s;
+    margin: auto;
+    width: 60%;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.close-img{
+    background-color: #377AB7;
+    border-radius: 50%;
+}
+
+.close-img:hover{
+    background-color: #0b67b8;
+    border-radius: 50%;
+}
+
+.specification-description{
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    font-size: larger;
+    font-weight: bold;
+    background-color: #377AB7;
+    color: white;
+    border-radius: 5px 5px 0px 0px;
+}
+
+.click-style{
+    border-radius: 50%;
+}
+
+.click-style:hover{
+    background-color: rgb(217, 217, 217);
     cursor: pointer;
 }
 
-/* add animation effects */
+.dropDownMenu{
+    border-radius: 5px;
+    border: solid 0.2px #d9d9d9;
+    color: black;
+    display: none;
+    position: absolute;
+    margin-left: 15px;
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.dropDownMenuItem{
+    padding: 5px;
+    width: 125px;
+}
+
+.dropDownMenuItem:hover{
+    color: #377AB7;
+}
+
 @-webkit-keyframes animatetop {
     from {top:-300px; opacity:0}
     to {top:0; opacity:1}

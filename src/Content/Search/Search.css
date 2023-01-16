@@ -45,7 +45,7 @@ input:focus {
 }
 
 button:hover{
-    background-color: rgba(255, 255, 255, 0.668);
+    background-color: rgba(255, 255, 255, 1);
 }
 
 .sortBtn{
@@ -92,7 +92,7 @@ button:hover{
 }
 
 #drop-down-menu-items{
-    background-color: rgba(255, 255, 255, 0.668);;
+    background-color: rgba(255, 255, 255, 1);;
 }
 
 #drop-down-menu-item{
