@@ -57,18 +57,24 @@ export function contractReduser(state = contractState, action){
                 case 0:
                     var searchedItems = state.contracts.contracts.filter((element) => {
                         let finalRes = element.contract.description.toLowerCase();
-                        return finalRes.indexOf(action.keyword) !== -1
+                        return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
                     });
                     break;
                 case 1: 
+                    var finalResult = state.contracts.clients.filter(client => {
+                        let finalRes = client.name.toLowerCase(); 
+                        return finalRes.indexOf(action.keyword.toLowerCase()) !== -1;
+                    });
                     var searchedItems = state.contracts.contracts.filter((element) => {
-                        return element.contract.clientId == action.keyword ? true : false;
+                        return finalResult.some((f) => {
+                            return f.id == element.contract.clientId;
+                        });
                     });
                     break;
                 case 2:
                     var searchedItems = state.contracts.contracts.filter((element) => {
                         let finalRes = element.contract.contractNumber.toLowerCase();
-                        return finalRes.indexOf(action.keyword) !== -1
+                        return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
                     });
                     break;
             }

@@ -42,20 +42,17 @@
     width: 50px;
     height: 50px;
 }
-
 #aboutImg{
     width: 35px;
     height: 35px;
     border-radius: 50%;
     margin: auto;
 }
-
 #specImg{
     width: 40px;
     height: 40px;
     margin: auto;
 }
-
 .mPopupSpecification {
     display: none;
     position: fixed;
@@ -68,21 +65,17 @@
     overflow: auto;
     background-color: rgba(0,0,0,0.4);
 }
-
 .modal-body {
     padding: 2px 12px;
     background-color: white;
 }
-
 .specification-table{
-    padding: 10px;
     margin: auto;
     color: #377AB7;
 }
-
-.modal-background{
+.modal-background-specification{
     position: relative;
-    padding: 0;
+    padding: 0px;
     -webkit-animation-name: animatetop;
     -webkit-animation-duration: 0.3s;
     animation-name: animatetop;
@@ -92,38 +85,46 @@
     border-radius: 5px;
     background-color: white;
 }
-
+.modal-background-acts{
+    position: relative;
+    padding: 0px;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.3s;
+    animation-name: animatetop;
+    animation-duration: 0.3s;
+    margin: auto;
+    width: 45%;
+    border-radius: 5px;
+    background-color: white;
+}
 .close-img{
+    width: 30px;
+    height: 30px;
     background-color: #377AB7;
     border-radius: 50%;
 }
-
 .close-img:hover{
     background-color: #0b67b8;
     border-radius: 50%;
 }
-
 .specification-description{
     align-items: center;
     display: flex;
     justify-content: space-between;
-    padding: 10px;
-    font-size: larger;
+    padding: 5px;
+    font-size: medium;
     font-weight: bold;
     background-color: #377AB7;
     color: white;
     border-radius: 5px 5px 0px 0px;
 }
-
 .click-style{
     border-radius: 50%;
 }
-
 .click-style:hover{
     background-color: rgb(217, 217, 217);
     cursor: pointer;
 }
-
 .dropDownMenu{
     border-radius: 5px;
     border: solid 0.2px #d9d9d9;
@@ -132,22 +133,19 @@
     position: absolute;
     margin-left: 15px;
     background-color: rgba(255, 255, 255, 1);
+    cursor: pointer;
 }
-
 .dropDownMenuItem{
     padding: 5px;
     width: 125px;
 }
-
 .dropDownMenuItem:hover{
     color: #377AB7;
 }
-
 @-webkit-keyframes animatetop {
     from {top:-300px; opacity:0}
     to {top:0; opacity:1}
 }
-
 @keyframes animatetop {
     from {top:-300px; opacity:0}
     to {top:0; opacity:1}

@@ -1,0 +1,40 @@
+.actOfContract{
+    padding: 0px;
+}
+.addDiv{
+    padding: 5px;
+    border: 2px solid #377AB7;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.addNewAct{
+    padding: 5px;
+}
+
+#addButton{
+    background-color: #377AB7;
+    border: 2px solid #377AB7;
+    border-radius: 5px 5px 5px 5px;
+    color: white;
+}
+
+#addButton:hover{
+    background-color: #1f62a1;
+    border: 2px solid #1f62a1; 
+    border-radius: 5px 5px 5px 5px;
+    color: white;
+}
+
+#closeButton{
+    background-color: #b73737;
+    border: 2px solid #b73737;
+    border-radius: 5px 5px 5px 5px;
+    color: white; 
+}
+
+#closeButton:hover{
+    background-color: #a11f1f;
+    border: 2px solid #a11f1f; 
+    border-radius: 5px 5px 5px 5px;
+    color: white;
+}

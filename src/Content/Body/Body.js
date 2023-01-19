@@ -78,7 +78,7 @@ function Body() {
             {c.searchedContracts && c.searchedContracts.map((contract, index) =>
               (
                 <div className='row'>
-                  <RowElement key={index} contract={contract.contract}></RowElement>
+                  <RowElement key={index} contract={contract}></RowElement>
                 </div>
               )
             )}

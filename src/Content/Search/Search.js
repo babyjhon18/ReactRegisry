@@ -67,7 +67,7 @@ function Search(){
         </div>  
         <div>
             <Dropdown className="mx-2">
-                <button id='searchButton' type="button" class="searchButton btn" onClick={() => search()}>Поиск</button>
+                <button id='searchButton' type="button" className="searchButton btn" onClick={() => search()}>Поиск</button>
                 <Dropdown.Toggle id="dropdown-autoclose-inside">
                 </Dropdown.Toggle>
                 <Dropdown.Menu id="drop-down-menu-items">
