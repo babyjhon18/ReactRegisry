@@ -1,4 +1,17 @@
-import { VIEW_CTC, EDIT_CTC, DELETE_CTC, SEARCH_CTC, UPDATE_CTC_VIEW, SORT_CTC, jsonHeaderRegistry } from '../Constants';
+import { 
+    VIEW_CTC, 
+    ADD_ACT,
+    EDIT_CTC, 
+    DELETE_CTC, 
+    SEARCH_CTC, 
+    UPDATE_CTC_VIEW, 
+    SORT_CTC, 
+    jsonHeaderRegistry, 
+    DELETE_ACT ,
+    ADD_PAYM,
+    DELETE_PAYM,
+    EDIT_ACT
+} from '../Constants';
 import axios from 'axios';
 
 var contractsData = []
@@ -22,6 +35,27 @@ const contractState = {
 
 export function contractReduser(state = contractState, action){
     switch(action.type){
+        case ADD_PAYM:
+            var selectedContract = state.contracts.contracts.findIndex((contract) => 
+            contract.contract.id == action.payload.fK_ContractId);
+            const updatedContractsWithPayment = [...state.contracts.contracts];
+            updatedContractsWithPayment[selectedContract].payments.push(action.payload);
+            return {
+                ...state,
+                searchedItems: updatedContractsWithPayment
+            }  
+        case DELETE_PAYM:
+            var indexOfContract = state.contracts.contracts.findIndex((contract) => 
+                contract.contract.id == action.payload.payment.fK_ContractId );
+            var editedPayments = state.contracts.contracts[indexOfContract].
+                payments.filter((payment) =>  {
+                return payment.id !== action.payload.payment.id
+            });
+            var newPaymentsInContract = [...state.contracts.contracts];
+            newPaymentsInContract[indexOfContract].payments = editedPayments;
+            return {
+                ...state
+            }
         case VIEW_CTC:
             return state;
         case UPDATE_CTC_VIEW:
@@ -31,7 +65,42 @@ export function contractReduser(state = contractState, action){
                 link: action.link,
                 contracts: action.payload,
                 searchedContracts:  action.payload.contracts
-            };            
+            };
+        case DELETE_ACT:
+            var indexOfContract = state.contracts.contracts.findIndex((contract) => 
+                contract.contract.id == action.payload.act.fK_ContractId);
+            var editedActs = state.contracts.contracts[indexOfContract].
+                acts.filter((act) =>  {
+                return act.id !== action.payload.act.id
+            });
+            var newActsInContract = [...state.contracts.contracts];
+            newActsInContract[indexOfContract].acts = editedActs;
+            return {
+                ...state
+            }
+        case EDIT_ACT:
+            console.log(action.payload.act);
+            var indexOfContract = state.contracts.contracts.findIndex((contract) => 
+                contract.contract.id == action.payload.act.fK_ContractId);
+            var updatedActIndex = state.contracts.contracts[indexOfContract].acts.findIndex((act) => 
+                act.id = action.payload.act.id);
+                console.log(updatedActIndex);
+            state.contracts.contracts[indexOfContract].acts[updatedActIndex].id = action.payload.act.id; 
+            state.contracts.contracts[indexOfContract].acts[updatedActIndex].actNumber = action.payload.act.actNumber;
+            state.contracts.contracts[indexOfContract].acts[updatedActIndex].actDate = action.payload.act.actDate;
+            state.contracts.contracts[indexOfContract].acts[updatedActIndex].fK_ContractId = action.payload.act.fK_ContractId;
+            return{
+                ...state
+            }
+        case ADD_ACT:
+            var selectedContract = state.contracts.contracts.findIndex((contract) => 
+                contract.contract.id == action.payload.fK_ContractId);
+            const updatedContracts = [...state.contracts.contracts];
+            updatedContracts[selectedContract].acts.push(action.payload);
+            return {
+                ...state,
+                searchedItems: updatedContracts
+            }  
         case EDIT_CTC:
             return state;
         case DELETE_CTC:

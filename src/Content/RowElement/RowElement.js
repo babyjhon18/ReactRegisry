@@ -8,7 +8,8 @@ import specificationImage from '..//..//images/specificationImage.png';
 import settings from '..//..//images/settings.png';
 import close from '..//..//images/close.png';
 import { useSelector } from "react-redux";
-import ActOfContract from '..//ActsOfContract//ActsOfContract'
+import ActOfContract from '..//ActsOfContract//ActsOfContract';
+import ContractsPayments from '..//ContractPayments//ContractsPayments';
 
 function RowElement(props){  
 
@@ -17,11 +18,13 @@ function RowElement(props){
     const store = useSelector(state => state.contractReduser)
 
     var mPopupSpecification = document.getElementById('mpopupBox')
-    var currentActId = 0
-    var mPopupActs = ""
-    var dropdown = ""
+    var currentContractId = 0;
+    var mPopupActs = "";
+    var mPopupPayments = "";
+    var dropdown = "";
 
     useEffect(() =>{
+        currentContractId = props.contract.contract.id;
         let formattedDate = props.contract.contract.contractDate.split('T')[0];
         formattedDate = formattedDate.split('-').reverse().join('.');
         store.contracts.clients.find(element => { 
@@ -63,8 +66,7 @@ function RowElement(props){
     }
 
     function onActClicked(id){
-        currentActId = id;
-        let actDescription = document.getElementById("actDescription");
+        let actDescription = document.getElementById("actDescription" + id);
         actDescription.textContent = "Акты оплат по договору " + props.contract.contract.description;
         let bar = document.getElementById('bar');
         bar.classList.add('zindex');
@@ -73,7 +75,12 @@ function RowElement(props){
     }
 
     function onPaymentClicked(id){
-
+        let paymentDescription = document.getElementById("paymentDescription" + id);
+        paymentDescription.textContent = "Оплаты по договору " + props.contract.contract.description;
+        let bar = document.getElementById('bar');
+        bar.classList.add('zindex');
+        mPopupPayments = document.getElementById('mpopupPayment' + id);
+        mPopupPayments.style.display = "block";
     }
 
     function closeSpecEvent(){
@@ -81,8 +88,15 @@ function RowElement(props){
     }
 
     function closeActs(){
-        mPopupActs = document.getElementById('mpopupActs' + currentActId)
+        mPopupActs = document.getElementById('mpopupActs' + currentContractId)
         mPopupActs.style.display = "none"; 
+        let bar = document.getElementById('bar');
+        bar.classList.remove('zindex');
+    }
+
+    function closePayment(){
+        mPopupPayments = document.getElementById('mpopupPayment' + currentContractId)
+        mPopupPayments.style.display = "none"; 
         let bar = document.getElementById('bar');
         bar.classList.remove('zindex');
     }
@@ -92,9 +106,13 @@ function RowElement(props){
             closeSpecification();
         }
         else{
-            mPopupActs = document.getElementById('mpopupActs' + currentActId)
+            mPopupActs = document.getElementById('mpopupActs' + currentContractId);
+            mPopupPayments = document.getElementById('mpopupPayment' + currentContractId);
             if(event.target == mPopupActs){
                 closeActs();
+            }
+            if(event.target == mPopupPayments){
+                closePayment()
             }
         }
     };
@@ -184,11 +202,21 @@ function RowElement(props){
             <div id={"mpopupActs" + props.contract.contract.id} class="mPopupSpecification">
                 <div className="modal-background-acts">
                     <div className="specification-description">
-                        <div id="actDescription"></div>
+                        <div id={"actDescription" + props.contract.contract.id}></div>
                         <img className="close-img" src={close} width={"40px"} height={"40px"}
-                            onClick={() => closeActs()}></img>
+                            onClick={() =>{ closeActs() }}></img>
                     </div>
                     <ActOfContract acts={props.contract.acts} id={props.contract.contract.id}></ActOfContract>
+                </div>
+            </div>
+            <div id={"mpopupPayment" + props.contract.contract.id} class="mPopupSpecification">
+                <div className="modal-background-acts">
+                    <div className="specification-description">
+                        <div id={"paymentDescription" + props.contract.contract.id}></div>
+                        <img className="close-img" src={close} width={"40px"} height={"40px"}
+                            onClick={() =>{ closePayment() }}></img>
+                    </div>
+                    <ContractsPayments payments={props.contract.payments} id={props.contract.contract.id}></ContractsPayments>
                 </div>
             </div>
         </div>

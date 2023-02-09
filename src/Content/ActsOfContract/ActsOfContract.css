@@ -7,6 +7,41 @@
     border-radius: 5px 5px 5px 5px;
 }
 
+.NumberContractInput{
+    margin: 10px;
+    border-radius: 3px;
+    height: 25px;
+    border: 1px solid black;
+}
+
+.NumberContractInput:focus{
+    border: 1px solid #377AB7;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.datetime-pickers-act{
+    margin: 10px;
+    border-radius: 3px;
+    border: 1px solid black;
+    width: 150px;
+    height: 25px;
+    color:rgba(0, 0, 0, 0.65)
+}
+
+.datetime-pickers-act:focus{
+    border: 1px solid #377AB7;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.datetime-pickers-act:hover{
+    border: 1px solid #377AB7;
+    cursor: pointer;
+}
+
+.NumberContractInput:hover{
+    border: 1px solid #377AB7;
+}
+
 .addNewAct{
     padding: 5px;
 }
