@@ -41,13 +41,13 @@ function ActsOfContract(props){
                     style={{margin: "auto"}}>
                         <div
                             className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3 textAlign" 
-                            style={{minWidth: "200px", margin: "auto 0px", maxWidth: "250px"}}>
+                            style={{minWidth: "150px", margin: "auto 0px", maxWidth: "160px"}}>
                             Номер акта: <input id={"actNum" + props.id} type={"text"} 
-                                placeholder={"Номер акта..."} className='NumberContractInput' required></input>
+                                placeholder={"номер акта"} className='NumberContractInput' required></input>
                         </div>
                         <div 
                             className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3 textAlign"
-                            style={{minWidth: "200px",margin: "auto 0px", maxWidth: "250px"}}>
+                            style={{minWidth: "150px",margin: "auto 0px", maxWidth: "180px"}}>
                             Дата: <input id={"actDate"+ props.id} type='date' className='datetime-pickers-act' required></input>
                         </div>
                         <div className='col' style={{margin: "auto 0px", minWidth: "80px", maxWidth: "100px"}}>

@@ -10,7 +10,8 @@ import {
     DELETE_ACT ,
     ADD_PAYM,
     DELETE_PAYM,
-    EDIT_ACT
+    EDIT_ACT,
+    EDIT_PAYM
 } from '../Constants';
 import axios from 'axios';
 
@@ -56,6 +57,31 @@ export function contractReduser(state = contractState, action){
             return {
                 ...state
             }
+        case EDIT_ACT:
+            var indexOfContract = state.contracts.contracts.findIndex((contract) => 
+                contract.contract.id == action.payload.fK_ContractId);
+            var updatedActIndex = state.contracts.contracts[indexOfContract].acts.findIndex((act) => 
+                act.id == action.payload.id);
+            state.contracts.contracts[indexOfContract].acts[updatedActIndex].id = action.payload.id; 
+            state.contracts.contracts[indexOfContract].acts[updatedActIndex].actNumber = action.payload.actNumber;
+            state.contracts.contracts[indexOfContract].acts[updatedActIndex].actDate = action.payload.actDate;
+            state.contracts.contracts[indexOfContract].acts[updatedActIndex].fK_ContractId = action.payload.fK_ContractId;
+            return{
+                ...state
+            }
+        case EDIT_PAYM:
+            var indexOfContract = state.contracts.contracts.findIndex((contract) => 
+                contract.contract.id == action.payload.fK_ContractId);
+            var updatedPaymentIndex = state.contracts.contracts[indexOfContract].payments.findIndex((payment) => 
+                payment.id == action.payload.id);
+            state.contracts.contracts[indexOfContract].payments[updatedPaymentIndex].id = action.payload.id; 
+            state.contracts.contracts[indexOfContract].payments[updatedPaymentIndex].paymentNumber = action.payload.paymentNumber;
+            state.contracts.contracts[indexOfContract].payments[updatedPaymentIndex].paymentDate = action.payload.paymentDate;
+            state.contracts.contracts[indexOfContract].payments[updatedPaymentIndex].paymentSum = action.payload.paymentSum;
+            state.contracts.contracts[indexOfContract].payments[updatedPaymentIndex].fK_ContractId = action.payload.fK_ContractId;
+            return {
+                ...state
+            }       
         case VIEW_CTC:
             return state;
         case UPDATE_CTC_VIEW:
@@ -76,20 +102,6 @@ export function contractReduser(state = contractState, action){
             var newActsInContract = [...state.contracts.contracts];
             newActsInContract[indexOfContract].acts = editedActs;
             return {
-                ...state
-            }
-        case EDIT_ACT:
-            console.log(action.payload.act);
-            var indexOfContract = state.contracts.contracts.findIndex((contract) => 
-                contract.contract.id == action.payload.act.fK_ContractId);
-            var updatedActIndex = state.contracts.contracts[indexOfContract].acts.findIndex((act) => 
-                act.id = action.payload.act.id);
-                console.log(updatedActIndex);
-            state.contracts.contracts[indexOfContract].acts[updatedActIndex].id = action.payload.act.id; 
-            state.contracts.contracts[indexOfContract].acts[updatedActIndex].actNumber = action.payload.act.actNumber;
-            state.contracts.contracts[indexOfContract].acts[updatedActIndex].actDate = action.payload.act.actDate;
-            state.contracts.contracts[indexOfContract].acts[updatedActIndex].fK_ContractId = action.payload.act.fK_ContractId;
-            return{
                 ...state
             }
         case ADD_ACT:

@@ -1,4 +1,4 @@
-import { VIEW_CTC, UPDATE_CTC_VIEW,EDIT_CTC, DELETE_CTC, SEARCH_CTC, SORT_CTC, ADD_ACT, DELETE_ACT, ADD_PAYM, EDIT_ACT } from "../Constants"
+import { VIEW_CTC, UPDATE_CTC_VIEW,EDIT_CTC, DELETE_CTC, SEARCH_CTC, SORT_CTC, ADD_ACT, DELETE_ACT, ADD_PAYM, EDIT_ACT, EDIT_PAYM } from "../Constants"
 
 export function ViewContracts(contractList, link, header){
     return {
@@ -69,9 +69,16 @@ export function AddNewPayment(data){
     }
 }
 
-export function EditContract(data){
+export function EditAct(data){
     return{
         type: EDIT_ACT,
+        payload: data,
+    }
+}
+
+export function EditPayment(data){
+    return{
+        type: EDIT_PAYM,
         payload: data,
     }
 }

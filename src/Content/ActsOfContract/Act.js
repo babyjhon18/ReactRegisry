@@ -23,20 +23,23 @@ function Act(props){
         actToEdit.style.display == "" ? actToEdit.style.display = "none" : actToEdit.style.display = "";
     }
 
-    async function editContract(actInfo){
-        actInfo.act.actNumber = 20;
-        console.log(actInfo.act);
-        var data = await fetch('http://37.17.58.180:8087/api/Acts?actId=' + actInfo.act.id, {
+    async function editContract(props){
+        let actDate = document.getElementById('actDate' + props.act.id).value;
+        let actNum = document.getElementById('actNum' + props.act.id).value;
+        let dataToSend = {id: props.act.id, actNumber: actNum, actDate: actDate + "T00:00:00", fK_ContractId: props.act.fK_ContractId}
+        console.log(dataToSend);
+        var data = await fetch('http://37.17.58.180:8087/api/Acts?actId=' + props.act.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(actInfo.act),
+            body: JSON.stringify(dataToSend),
             }).then((response) => {
+                console.log(response);
                 return response.json();
         });
         if(data != null){
-            dispatch({type: EDIT_ACT, payload: actInfo});
+            dispatch({type: EDIT_ACT, payload: dataToSend});
             editContractClick(data);
         }
     }
@@ -63,23 +66,18 @@ function Act(props){
             </div>
             <div id={"actToEdit"+props.act.id} style={{display: "none"}} className="col-md-8 col-sm-8 col-lg-8 col-xs-8 col-xl-8 row ">
                 <div className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign" 
-                    style={{minWidth: "200px", margin: "auto 0px", maxWidth: "200px"}}>
-                    Номер акта: <input required></input>
+                    style={{minWidth: "150px", margin: "auto 0px", maxWidth: "160px"}}>
+                    Номер акта: <input id={"actNum" + props.act.id} placeholder={"номер акта"} className="NumberContractInput" required></input>
                 </div>
                 <div 
                     className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign"
-                    style={{minWidth: "150px",margin: "auto 0px", maxWidth: "200px"}}>
-                    Дата: <input type='date' className='datetime-pickers-act' required></input> 
+                    style={{minWidth: "150px",margin: "auto 0px", maxWidth: "180px"}}>
+                    Дата: <input type='date' id={"actDate" + props.act.id} className='datetime-pickers-act' required></input> 
                 </div>
                 <div className='col' style={{margin: "auto 0px", minWidth: "80px", maxWidth: "100px"}}>
                     <button type="button" id="addButton" 
                         className="btn col" 
-                        onClick={() => editContract(props)}>Добавить</button> 
-                </div>
-                <div className='col' style={{margin: "auto 0px", minWidth: "80px", maxWidth: "100px"}}>
-                    <button type="button" id="closeButton" 
-                        className="btn col"
-                        onClick={() => {document.getElementById('addDiv' + props.id).style.display = "none"}}>Отмена</button> 
+                        onClick={() => editContract(props)}>Изменить</button> 
                 </div>
             </div>
             <div className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 row actIcons">
