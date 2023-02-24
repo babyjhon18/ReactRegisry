@@ -1,0 +1,29 @@
+.NumberContractInputReadyToConst{
+    margin: auto 0px;
+    border-radius: 3px;
+    width: 380px !important;
+    height: 100px;
+    border: 1px solid black;
+}
+
+.NumberContractInputReadyToConst:focus{
+    border: 1px solid #377AB7;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.checkInput{
+    margin: auto 0px;
+    border-radius: 3px;
+    width: 20px !important;
+    height: 20px;
+    border: 1px solid black;
+}
+
+.checkInput:focus{
+    border: 1px solid #377AB7;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.textAlignStart{
+    margin: auto;
+}

@@ -1,4 +1,4 @@
-#mainDiv{
+.mainDiv{
     cursor: default;
     display: flex;
     box-shadow: 0px 1px 0px 0px #d9d9d9;
@@ -8,29 +8,27 @@
     height: 50px;
     color: rgba(0, 0, 0, 0.65);
 }
-
 .zindex{
     z-index: 0;
 }
-
-#mainDiv:hover{
+.mainDiv:hover{
     background-color: rgba(0, 0, 0, 0.06);
     box-shadow: 0px 1px 0px 0px #3779b78d;
 }
-#mainDiv .col-lg-3{
+.mainDiv .col-lg-3{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     padding: 8px;
 }
-#mainDiv .col-lg-2{
+.mainDiv .col-lg-2{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;
     padding: 8px;
 }
-#mainDiv .col-lg-1{
+.mainDiv .col-lg-1{
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -94,6 +92,18 @@
     animation-duration: 0.3s;
     margin: auto;
     width: 55%;
+    border-radius: 5px;
+    background-color: white;
+}
+.modal-background-sign{
+    position: relative;
+    padding: 0px;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.3s;
+    animation-name: animatetop;
+    animation-duration: 0.3s;
+    margin: auto;
+    width: 30%;
     border-radius: 5px;
     background-color: white;
 }

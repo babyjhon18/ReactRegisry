@@ -2,13 +2,15 @@ import './Payment.css';
 import penImage from '..//..//images/penEdit.png';
 import deleteImage from '..//..//images/trashCanDelete.png';
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { DELETE_PAYM, EDIT_PAYM } from '../../Constants';
 
 function Payment(props){
 
     const [date, setDateFormat] = useState();
     const dispatch = useDispatch();
+    const [dateTime, setDate] = useState(new Date());
+    const store = useSelector(state => state.contractReduser)
 
     function deletePayment(paymentInfo){
         fetch('http://37.17.58.180:8087/api/Payments?paymentId=' + paymentInfo.payment.id, 
@@ -45,11 +47,16 @@ function Payment(props){
         }
     }
 
+    const handleInputChange = (e) => {
+        setDate(e.target.value)
+    }
+
     useEffect(() => {
+        setDate(props.payment.paymentDate.split('T')[0]);
         let formattedDate = props.payment.paymentDate.split('T')[0];
         formattedDate = formattedDate.split('-').reverse().join('.');
         setDateFormat(formattedDate);
-    })
+    },[store])
 
     return(
         <div className='col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 row actRow' style={{margin: "0px"}}>
@@ -73,17 +80,17 @@ function Payment(props){
             <div id={"paymentToEdit" + props.payment.id} style={{display: "none"}} className="col-md-8 col-sm-8 col-lg-8 col-xs-8 col-xl-8 row ">
                 <div className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign" 
                     style={{minWidth: "150px", margin: "auto 2px", maxWidth: "140px"}}>
-                    Номер платежа: <input id={'paymentNum' + props.payment.id} placeholder={"номер платежа"} className='NumberContractInput' required></input>
+                    Номер платежа: <input id={'paymentNum' + props.payment.id} placeholder={"номер платежа"} defaultValue={props.payment.paymentNumber} className='NumberContractInput' required></input>
                 </div>
                 <div 
                     className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign"
                     style={{minWidth: "130px",margin: "auto 2px", maxWidth: "150px"}}>
-                    Дата: <input id={'paymentDate' + props.payment.id} className='NumberContractInput' type='date' required></input> 
+                    Дата: <input id={'paymentDate' + props.payment.id} onChange={handleInputChange} value={dateTime} className='NumberContractInput' type='date' required></input> 
                 </div>
                 <div 
                     className="col textAlign"
                     style={{minWidth: "120px",margin: "auto 2px", maxWidth: "140px"}}>
-                    Сумма: <input id={'paymentSum' + props.payment.id} placeholder={"сумма платежа"} className='NumberContractInput' required></input>
+                    Сумма: <input id={'paymentSum' + props.payment.id} placeholder={"сумма платежа"} defaultValue={props.payment.paymentSum} className='NumberContractInput' required></input>
                 </div>
                 <div className='col' style={{margin: "auto 0px", minWidth: "120px", maxWidth: "160px"}}>
                     <button type="button" id="addButton" 

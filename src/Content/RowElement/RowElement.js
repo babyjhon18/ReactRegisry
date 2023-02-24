@@ -10,21 +10,26 @@ import close from '..//..//images/close.png';
 import { useSelector } from "react-redux";
 import ActOfContract from '..//ActsOfContract//ActsOfContract';
 import ContractsPayments from '..//ContractPayments//ContractsPayments';
+import SignContract from "../SignContract/SignContract";
+import ReadyContract from "../ReadyContract/ReadyContract";
 
 function RowElement(props){  
 
     const [date, setDateFormat] = useState();
     const [clientName, setClientName] = useState();
+    const [paymentPercent, setPaymentPercent] = useState();
     const store = useSelector(state => state.contractReduser)
 
     var mPopupSpecification = document.getElementById('mpopupBox')
-    var currentContractId = 0;
+    var currentContractId = props.contract.contract.id;
     var mPopupActs = "";
     var mPopupPayments = "";
+    var mpopupSign = "";
     var dropdown = "";
+    const actToClose = "Акты";
+    const paymentToClose = "Оплаты"
 
     useEffect(() =>{
-        currentContractId = props.contract.contract.id;
         let formattedDate = props.contract.contract.contractDate.split('T')[0];
         formattedDate = formattedDate.split('-').reverse().join('.');
         store.contracts.clients.find(element => { 
@@ -33,7 +38,32 @@ function RowElement(props){
             }  
         })
         setDateFormat(formattedDate);
-    })
+        if(props.contract.payments.length !== 0){
+            let wholePayment = 0;
+            props.contract.payments.forEach((payment) => {
+                wholePayment += parseFloat(payment.paymentSum);
+            });
+            setPaymentPercent(Math.round(wholePayment / props.contract.contract.amount * 100)); 
+        }
+    }, [store])
+
+    function onReadyClick(id){
+        let signDescription = document.getElementById("signDescription" + props.contract.contract.id);
+        signDescription.textContent = "Готовность договора " + props.contract.contract.description;
+        let bar = document.getElementById('bar');
+        bar.classList.add('zindex');
+        mpopupSign = document.getElementById('mpopupSign' + id);
+        mpopupSign.style.display = "block";
+    }
+
+    function onSignClicked(id){
+        let signDescription = document.getElementById("signDescription" + props.contract.contract.id);
+        signDescription.textContent = "Подпись договора " + props.contract.contract.description;
+        let bar = document.getElementById('bar');
+        bar.classList.add('zindex');
+        mpopupSign = document.getElementById('mpopupSign' + id);
+        mpopupSign.style.display = "block";
+    }
 
     function specificationClicked(){
         var doc = new DOMParser().parseFromString(props.contract.contract.htmlSpecification, "text/html");
@@ -66,6 +96,7 @@ function RowElement(props){
     }
 
     function onActClicked(id){
+        currentContractId = id;
         let actDescription = document.getElementById("actDescription" + id);
         actDescription.textContent = "Акты оплат по договору " + props.contract.contract.description;
         let bar = document.getElementById('bar');
@@ -75,6 +106,7 @@ function RowElement(props){
     }
 
     function onPaymentClicked(id){
+        currentContractId = id;
         let paymentDescription = document.getElementById("paymentDescription" + id);
         paymentDescription.textContent = "Оплаты по договору " + props.contract.contract.description;
         let bar = document.getElementById('bar');
@@ -101,25 +133,30 @@ function RowElement(props){
         bar.classList.remove('zindex');
     }
 
+    function closeSignView(){
+        mpopupSign = document.getElementById('mpopupSign' + currentContractId)
+        mpopupSign.style.display = "none"; 
+        let bar = document.getElementById('bar');
+        bar.classList.remove('zindex');
+    }
+
     window.onclick = function(event) {
         if (event.target == mPopupSpecification) {
             closeSpecification();
         }
         else{
-            mPopupActs = document.getElementById('mpopupActs' + currentContractId);
-            mPopupPayments = document.getElementById('mpopupPayment' + currentContractId);
-            if(event.target == mPopupActs){
-                closeActs();
+            mPopupActs = document.getElementById(event.target.id);
+            mPopupPayments = document.getElementById(event.target.id);
+            if(mPopupActs.textContent.indexOf(actToClose !== -1)){
             }
-            if(event.target == mPopupPayments){
-                closePayment()
+            if(mPopupPayments.textContent.indexOf(paymentToClose !== -1)){
             }
         }
     };
 
     return (
         <div style={{padding: "0px"}}>
-            <div className="col-lg-12" id="mainDiv">
+            <div className="col-lg-12 mainDiv" id={"mainDiv"+props.contract.contract.id}>
             <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1"
                     style={{minWidth: "30px", maxWidth: "44px"}}
                     onMouseLeave={() => dropdown.style.display = "none"} > 
@@ -136,8 +173,15 @@ function RowElement(props){
                         <div className="dropDownMenuItem"
                             onClick={() => onPaymentClicked(props.contract.contract.id)}>Платежи
                         </div>
-                        <div className="dropDownMenuItem">Готовность
-                        </div>
+                        {
+                            store.currentTab == 0 ?  
+                            <div className="dropDownMenuItem"
+                                onClick={() => onSignClicked(props.contract.contract.id)}>Подписание
+                            </div> :
+                            <div className="dropDownMenuItem"
+                                onClick={() => onReadyClick(props.contract.contract.id)}>Готовность
+                            </div>
+                        }
                     </div>
                 </div>
                 <div title={props.contract.contract.description} className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
@@ -163,7 +207,7 @@ function RowElement(props){
                 </div>
                 <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
                     style={{minWidth: "80px",margin: "auto 0px", maxWidth: "100px"}}>
-                    {props.contract.contract.percent}
+                    {paymentPercent}
                 </div>
                 <div title={props.contract.contract.deadlineCondition} className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
                     style={{minWidth: "100px",margin: "auto 0px", maxWidth: "150px"}}>
@@ -217,6 +261,21 @@ function RowElement(props){
                             onClick={() =>{ closePayment() }}></img>
                     </div>
                     <ContractsPayments payments={props.contract.payments} id={props.contract.contract.id}></ContractsPayments>
+                </div>
+            </div>
+            <div id={"mpopupSign" + props.contract.contract.id} class="mPopupSpecification">
+                <div className="modal-background-sign">
+                    <div className="specification-description">
+                        <div id={"signDescription" + props.contract.contract.id}></div>
+                        <img className="close-img" src={close} width={"40px"} height={"40px"}
+                                onClick={() =>{ closeSignView() }}></img>
+                    </div>
+                    {
+                        store.currentTab == 0 ? 
+                        <SignContract contractDescription={props.contract.contract} id={props.contract.contract.id}></SignContract> :
+                        <ReadyContract contractDescription={props.contract.contract} id={props.contract.contract.id}></ReadyContract>
+                    }
+                    
                 </div>
             </div>
         </div>

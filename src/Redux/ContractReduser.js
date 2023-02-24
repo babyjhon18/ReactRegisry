@@ -11,7 +11,8 @@ import {
     ADD_PAYM,
     DELETE_PAYM,
     EDIT_ACT,
-    EDIT_PAYM
+    EDIT_PAYM,
+    SORT_BY_DATE
 } from '../Constants';
 import axios from 'axios';
 
@@ -32,6 +33,7 @@ const contractState = {
     header: jsonHeaderRegistry,
     contracts: getContracts('http://37.17.58.180:8087/api/Contracts'),
     searchedContracts: contracts,
+    currentTab: 0,
 } 
 
 export function contractReduser(state = contractState, action){
@@ -42,8 +44,7 @@ export function contractReduser(state = contractState, action){
             const updatedContractsWithPayment = [...state.contracts.contracts];
             updatedContractsWithPayment[selectedContract].payments.push(action.payload);
             return {
-                ...state,
-                searchedItems: updatedContractsWithPayment
+                ...state
             }  
         case DELETE_PAYM:
             var indexOfContract = state.contracts.contracts.findIndex((contract) => 
@@ -90,7 +91,8 @@ export function contractReduser(state = contractState, action){
                 header: action.rowHeader,
                 link: action.link,
                 contracts: action.payload,
-                searchedContracts:  action.payload.contracts
+                searchedContracts:  action.payload.contracts,
+                currentTab: action.tab
             };
         case DELETE_ACT:
             var indexOfContract = state.contracts.contracts.findIndex((contract) => 
@@ -110,28 +112,92 @@ export function contractReduser(state = contractState, action){
             const updatedContracts = [...state.contracts.contracts];
             updatedContracts[selectedContract].acts.push(action.payload);
             return {
-                ...state,
-                searchedItems: updatedContracts
+                ...state
             }  
         case EDIT_CTC:
-            return state;
+            console.log(action.payload);
+            var selectedContract = state.contracts.contracts.findIndex((contract) => 
+                contract.contract.id == action.payload.id);
+            const updateContracts = [...state.contracts.contracts];
+            updateContracts[selectedContract] = action.payload;
+            return {
+                ...state
+            }
         case DELETE_CTC:
             return state;
         case SORT_CTC:
-            var sortedItems = state.contracts.contracts.sort(
-                function(a, b){
-                    if(a.contract.contractDate > b.contract.contractDate){
-                        return action.sortDirection ? 1 : -1;
-                    }
-                    if(a.contract.contractDate < b.contract.contractDate){
-                        return action.sortDirection ? -1 : 1;
-                    }
-                    return 0;
-                }
-            );
+            var sortedItems = [];
+            switch(action.sortType){
+                case 0: 
+                    sortedItems = state.contracts.contracts.sort(function(a, b){
+                        if(action.sortDirection){
+                            return (a.contract.readyMark === b.contract.readyMark) ? 0 : a.contract.readyMark ? 1 : -1;
+                        }
+                        else{
+                            return (a.contract.readyMark === b.contract.readyMark) ? 0 : a.contract.readyMark ? -1 : 1
+                        }
+                    });
+                    break;
+                case 1: 
+                    sortedItems = state.contracts.contracts.sort(function(a, b){
+                        if(action.sortDirection){
+                            return (a.contract.signatureMark === b.contract.signatureMark) ? 0 : a.contract.signatureMark ? 1 : -1;
+                        }
+                        else{
+                            return (a.contract.signatureMark === b.contract.signatureMark) ? 0 : a.contract.signatureMark ? -1 : 1
+                        }
+                    });
+                    break;
+                case 2: 
+                    sortedItems = state.contracts.contracts.sort(function(a, b){
+                        if(action.sortDirection){
+                            return (a.contract.ourDelivery === b.contract.ourDelivery) ? 0 : a.contract.ourDelivery ? 1 : -1;
+                        }
+                        else{
+                            return (a.contract.ourDelivery === b.contract.ourDelivery) ? 0 : a.contract.ourDelivery ? -1 : 1
+                        }
+                    });
+                    break;
+                case 3: 
+                    sortedItems = state.contracts.contracts.sort(function(a, b){
+                        if(a.contract.contractDate > b.contract.contractDate){
+                            return action.sortDirection ? 1 : -1;
+                        }
+                        if(a.contract.contractDate < b.contract.contractDate){
+                            return action.sortDirection ? -1 : 1;
+                        }
+                        return 0;
+                    });
+                    break;
+                case 4:
+                    sortedItems = state.contracts.contracts.sort(function (a, b) {
+                        if (a.contract.description < b.contract.description) {
+                            return action.sortDirection ? 1 : -1;
+                        }
+                        if (a.contract.description > b.contract.description) {
+                            return action.sortDirection ? -1 : 1;
+                        }
+                        return 0;
+                    });
+                    break;
+            }
             return {
                 ...state,
                 searchedContracts: sortedItems,
+            }
+        case SORT_BY_DATE:
+            var sortedItems = [];
+            let dateFrom = new Date(action.dateFrom);
+            let dateTo = new Date(action.dateTo);
+            state.contracts.contracts.map((contract) => {
+                let date = new Date(contract.contract.contractDate); 
+                if(dateFrom < date && date < dateTo){
+                    sortedItems.push(contract);
+                }
+            })
+            return{
+                ...state,
+                searchedContracts: sortedItems
             }
         case SEARCH_CTC:
             switch(action.index){ 

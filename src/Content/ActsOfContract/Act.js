@@ -3,12 +3,14 @@ import { useEffect, useState } from 'react';
 import penImage from '..//..//images/penEdit.png';
 import deleteImage from '..//..//images/trashCanDelete.png';
 import { DELETE_ACT, EDIT_ACT } from '../../Constants';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 function Act(props){
 
     const dispatch = useDispatch();
     const [date, setDateFormat] = useState();
+    const [dateTime, setDate] = useState(new Date());
+    const store = useSelector(state => state.contractReduser);
 
     function deleteActs(actInfo){
         fetch('http://37.17.58.180:8087/api/Acts?actId=' + actInfo.act.id, { method: 'DELETE' }).then((responce) => {
@@ -27,7 +29,6 @@ function Act(props){
         let actDate = document.getElementById('actDate' + props.act.id).value;
         let actNum = document.getElementById('actNum' + props.act.id).value;
         let dataToSend = {id: props.act.id, actNumber: actNum, actDate: actDate + "T00:00:00", fK_ContractId: props.act.fK_ContractId}
-        console.log(dataToSend);
         var data = await fetch('http://37.17.58.180:8087/api/Acts?actId=' + props.act.id, {
             method: 'POST',
             headers: {
@@ -43,12 +44,17 @@ function Act(props){
             editContractClick(data);
         }
     }
+    
+    const handleInputChange = (e) => {
+        setDate(e.target.value)
+    }
 
     useEffect(()=>{
+        setDate(props.act.actDate.split('T')[0]);
         let formattedDate = props.act.actDate.split('T')[0];
         formattedDate = formattedDate.split('-').reverse().join('.');
         setDateFormat(formattedDate);
-    })
+    },[store])
 
     return (
         <div className='col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 row actRow' style={{margin: "0px"}}>
@@ -67,12 +73,12 @@ function Act(props){
             <div id={"actToEdit"+props.act.id} style={{display: "none"}} className="col-md-8 col-sm-8 col-lg-8 col-xs-8 col-xl-8 row ">
                 <div className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign" 
                     style={{minWidth: "150px", margin: "auto 0px", maxWidth: "160px"}}>
-                    Номер акта: <input id={"actNum" + props.act.id} placeholder={"номер акта"} className="NumberContractInput" required></input>
+                    Номер акта: <input id={"actNum" + props.act.id} placeholder={"номер акта"} defaultValue={props.act.actNumber} className="NumberContractInput" required></input>
                 </div>
                 <div 
                     className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign"
                     style={{minWidth: "150px",margin: "auto 0px", maxWidth: "180px"}}>
-                    Дата: <input type='date' id={"actDate" + props.act.id} className='datetime-pickers-act' required></input> 
+                    Дата: <input type='date' id={"actDate" + props.act.id} onChange={handleInputChange} value={dateTime} className='datetime-pickers-act' required></input> 
                 </div>
                 <div className='col' style={{margin: "auto 0px", minWidth: "80px", maxWidth: "100px"}}>
                     <button type="button" id="addButton" 

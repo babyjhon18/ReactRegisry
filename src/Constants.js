@@ -5,6 +5,7 @@ export const EDIT_CTC = "EDIT_CTC";
 export const DELETE_CTC = "DELETE_CTC";
 export const SEARCH_CTC = "SEARCH_CTC";
 export const SORT_CTC = "SORT_CTC";
+export const SORT_BY_DATE = "SORT_BY_DATE"; 
 //Payments
 export const VIEW_PAYM = "VIEW_PAYM";
 export const ADD_PAYM = "ADD_PAYM"; 
@@ -38,7 +39,7 @@ export const jsonHeaderRegistry = {
   export const jsonHeaderWorkPlan = {
     id:1,
     notes:"",
-    description:"Наименование договора bobra",
+    description:"Наименование договора",
     client:"Заказчик",
     contractNumber:"Номер договора",
     contractDate:"Дата договора",

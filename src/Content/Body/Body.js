@@ -42,16 +42,16 @@ function Body() {
     setMenuCollapse(true);
   };
 
-  const getData = async (link) => {
+  const getData = async (link, index) => {
     await axios.get(link).then((response) => {
-      dispatch({type: UPDATE_CTC_VIEW, payload: response.data, link: link, header: header})
+      dispatch({type: UPDATE_CTC_VIEW, payload: response.data, link: link, header: header, tab: index})
     });
   };
 
   const fetchData = (link, index, header) => {
     setHeader(header);
     setMenuActivate(index);
-    getData(link);
+    getData(link, index);
   };
 
   return ( <div>
