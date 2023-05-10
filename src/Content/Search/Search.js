@@ -3,15 +3,16 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 import sortUp from '../../images/sortUpDown.png'
 import sortDown from '../../images/sortDownUp.png'
-import {React, useState, useEffect} from 'react';
+import {React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SEARCH_CTC, SORT_BY_DATE, SORT_CTC } from '../../Constants';
 
 function Search(){
 
     const dispatch = useDispatch();
-    const [dateFrom,setDateFrom] = useState(new Date());
-    const [dateTo,setDateTo] = useState(new Date());
+    const contracts = useSelector(state => state.contractReduser)
+    const [dateFrom,setDateFrom] = useState();
+    const [dateTo,setDateTo] = useState();
     const [searchItemIndex, setSearchItemIndex] = useState(0);
     const [searchItemPlaceholder, setPlaceholder] = useState("Поиск по наименованию договора...");
     const [sortTypeText, setSortTypeText] = useState("Сортировать по...")
@@ -20,8 +21,12 @@ function Search(){
     const [sortType, setSortType] = useState(3);
 
     useEffect(() => {
-        setSortDirection(false);
-    })
+        setSortDirection(false);   
+        const currentYear = new Date().getFullYear();
+        setDateFrom(currentYear - 1 + "-01-01");
+        const date = new Date().toLocaleDateString();
+        setDateTo(date.split('.').reverse().join('-'));
+    },[]);
 
     const sortClick = event => {
         if(event.target.src === sortUp)  {
@@ -99,7 +104,6 @@ function Search(){
 
     const handleDateFromChange = (e) => {
         setDateFrom(e.target.value);
-        console.log(e.target.value);
         if(e.target.value === ""){
             dispatch({type: SORT_CTC, sortDirection: sortDirection})
         }
@@ -110,7 +114,6 @@ function Search(){
 
     const handleDateToChange = (e) => {
         setDateTo(e.target.value);
-        console.log(e.target.value);
         if(e.target.value === ""){
             dispatch({type: SORT_CTC, sortDirection: sortDirection})
         }
@@ -138,11 +141,11 @@ function Search(){
         </div>
         <div>
             С:
-            <input type='date' className='datetime-pickers' onChange={handleDateFromChange}></input>
+            <input type='date' className='datetime-pickers' onChange={handleDateFromChange} value={dateFrom} ></input>
         </div>
         <div>
             по:
-            <input type='date' className='datetime-pickers' onChange={handleDateToChange}></input>
+            <input type='date' className='datetime-pickers' onChange={handleDateToChange} value={dateTo} ></input>
         </div>
         <div>
             <Dropdown className="mx-2">

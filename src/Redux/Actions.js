@@ -1,4 +1,4 @@
-import { VIEW_CTC, UPDATE_CTC_VIEW,EDIT_CTC, DELETE_CTC, SEARCH_CTC, SORT_CTC, ADD_ACT, DELETE_ACT, ADD_PAYM, EDIT_ACT, EDIT_PAYM, SORT_BY_DATE } from "../Constants"
+import { VIEW_CTC, UPDATE_CTC_VIEW,EDIT_CTC, DELETE_CTC, SEARCH_CTC, SORT_CTC, ADD_ACT, DELETE_ACT, ADD_PAYM, EDIT_ACT, EDIT_PAYM, SORT_BY_DATE, ADD_CLIENT_TO_BLACK_LIST, DELETE_CLIENT_FROM_BLACK_LIST } from "../Constants"
 
 export function ViewContracts(contractList, link, header){
     return {
@@ -98,5 +98,18 @@ export function SortByDate(dateFrom, dateTo, sortDirection){
         sortDirection: sortDirection,
         dateFrom: dateFrom,
         dateTo: dateTo
+    }
+}
+
+export function AddNewClientToBlackList(newClient){
+    return {
+        type: ADD_CLIENT_TO_BLACK_LIST,
+        payload: newClient
+    }
+}
+
+export function DeleteClientFromBlackList(){
+    return {
+        type: DELETE_CLIENT_FROM_BLACK_LIST
     }
 }

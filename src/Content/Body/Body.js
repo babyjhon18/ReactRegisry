@@ -3,7 +3,7 @@ import '../../Content/Body/Body.css'
 import "react-pro-sidebar/dist/css/styles.css";
 //import logic utils
 import React, { useState, useEffect } from "react";
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 //import network 
 import axios from 'axios'
 //import custom controls
@@ -18,8 +18,11 @@ import RowElement from '../RowElement/RowElement'
 import RowHeader from '../RowHeader/RowHeader'
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
+import { BsExclamationCircleFill } from "react-icons/bs";
 //import constants
 import { jsonHeaderRegistry, jsonHeaderWorkPlan, UPDATE_CTC_VIEW } from '../../Constants';
+import close from '..//..//images/close.png';
+import BlackList from '../BlackList/BlackList';
 
 function Body() {  
 
@@ -29,6 +32,7 @@ function Body() {
   const [activate, setMenuActivate] = useState(0);
   const [header, setHeader] = useState(jsonHeaderRegistry);
   const dispatch = useDispatch();
+  var mPopupBlackList = document.getElementById('mpopupBlackListId');
 
   useEffect(() => {
     fetchData('http://37.17.58.180:8087/api/Contracts', 0, jsonHeaderRegistry);
@@ -47,6 +51,24 @@ function Body() {
       dispatch({type: UPDATE_CTC_VIEW, payload: response.data, link: link, header: header, tab: index})
     });
   };
+
+  function closeBlackList(){
+    mPopupBlackList.style.display = "none"; 
+    let bar = document.getElementById('bar');
+    bar.classList.remove('zindex');
+  }
+
+  const openModalBlackList = () => {
+    let blackListDescription = document.getElementById("blackListDesc");
+    blackListDescription.textContent = "Черный список клиентов"
+    let bar = document.getElementById('bar');
+    bar.classList.add('zindex');
+    mPopupBlackList.style.display = "block";
+  }
+
+  const closeBlackListClick = () => {
+    closeBlackList();
+  }
 
   const fetchData = (link, index, header) => {
     setHeader(header);
@@ -69,7 +91,25 @@ function Body() {
             icon={<FaRegCalendarAlt />}>План работ</MenuItem>
           </Menu>
         </SidebarContent>
+        <SidebarFooter>
+          <Menu iconShape="square">
+            <MenuItem 
+            onClick={() => openModalBlackList()}
+            icon={<BsExclamationCircleFill />}>Черный список</MenuItem>
+          </Menu>
+        </SidebarFooter>
       </ProSidebar>
+    </div>
+    <div id="mpopupBlackListId" class="mPopupBlackList">
+      <div className="modal-background-blackList">
+          <div className="specification-description">
+              <div id="blackListDesc"></div>
+              <img className="close-img" src={close} width={"40px"} height={"40px"}
+              onClick={closeBlackListClick}
+              ></img>
+          </div>
+          <BlackList></BlackList>
+      </div>
     </div>
     <div id="mainBody">
         <div id="row" className='row'>

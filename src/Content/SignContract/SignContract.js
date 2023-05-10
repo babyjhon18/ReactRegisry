@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EDIT_CTC } from '../../Constants';
 import '..//SignContract//SignContract.css';    
@@ -6,13 +7,17 @@ function SignContract(props){
 
     const clients = useSelector(state => state.contractReduser)
     const dispatch = useDispatch();
-
-    async function saveCommentAndStatusOfContract(contract){
-        let readyToWork = document.getElementById("readyToWork" + contract.id);
+    const [dateTime, setDate] = useState(new Date()); 
+    
+    async function saveCommentAndStatusOfContract(contract){ 
+        let readyToWorkDate = document.getElementById("readyToWorkDate" + contract.id).value;
+        let readyToWork = document.getElementById("readyToWork" + contract.id).checked;
         let comment = document.getElementById("comment" + contract.id).value;
         contract.comment = comment;
-        contract.signatureMark = readyToWork.checked;
+        contract.signatureMark = readyToWork;
+        contract.signDate = readyToWorkDate;
         let dataToSend = contract;
+        console.log(dataToSend);
         let clientIndex = clients.contracts.clients.findIndex((client) => client.id == contract.clientId);
         let clientName = clients.contracts.clients[clientIndex].name;
         let termIndex = clients.contracts.termsOfPayment.findIndex((paym) => paym.id == contract.termsOfPaymentId);
@@ -33,20 +38,32 @@ function SignContract(props){
         }
     }
 
+    useEffect(()=>{
+        setDate(props.contractDescription.signDate.split('T')[0]);
+    },[clients])
+
+    const handleInputChange = (e) => {
+        setDate(e.target.value)
+    }
+
     return(
         <div>
              <div className='addNewAct' id={props.id}>
                 {
-                    props.contractDescription.signatureMark == true ? 
+                    props.contractDescription.signatureMark ? (
                     <div className="row" style={{margin: "5px 0px"}}>
                         Готов к производству: &nbsp;<input id={"readyToWork"+props.contractDescription.id} 
                         className='checkInput' type={"checkbox"} defaultChecked></input>
-                    </div> :
+                    </div> ):
                     <div className="row" style={{margin: "5px 0px"}}>
                         Готов к производству: &nbsp;<input id={"readyToWork"+props.contractDescription.id} 
                         className='checkInput' type={"checkbox"}></input>
                     </div>
                 }
+                <div className='date-time' style={{margin: "0px 0px", display: 'flex', alignItems: 'center'}}>
+                    Дата подписания: &nbsp;<input id={"readyToWorkDate"+props.contractDescription.id} 
+                    type='date' className='datetime-pickers' onChange={handleInputChange} value={dateTime}></input>
+                </div>
                 <div className="row" style={{margin: "5px 0px"}}>
                     Комментарий: &nbsp;<textarea id={"comment"+props.contractDescription.id} 
                     className='NumberContractInputReadyToConst textAlignStart' type={"text"}>{props.contractDescription.comment}</textarea>

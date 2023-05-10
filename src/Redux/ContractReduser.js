@@ -12,17 +12,21 @@ import {
     DELETE_PAYM,
     EDIT_ACT,
     EDIT_PAYM,
-    SORT_BY_DATE
+    SORT_BY_DATE,
+    ADD_CLIENT_TO_BLACK_LIST,
+    DELETE_CLIENT_FROM_BLACK_LIST
 } from '../Constants';
 import axios from 'axios';
 
-var contractsData = []
-var contracts = []
+var contractsData = [];
+var contracts = [];
+var blackList = [];
 
 function getContracts(link){
     axios.get(link).then((response) => {
         contractsData = response.data;
         contracts = contractsData.contracts;
+        blackList = contractsData.blackListClients;
     });
     return contractsData;
 }
@@ -33,6 +37,7 @@ const contractState = {
     header: jsonHeaderRegistry,
     contracts: getContracts('http://37.17.58.180:8087/api/Contracts'),
     searchedContracts: contracts,
+    blackList: blackList,
     currentTab: 0,
 } 
 
@@ -86,12 +91,23 @@ export function contractReduser(state = contractState, action){
         case VIEW_CTC:
             return state;
         case UPDATE_CTC_VIEW:
+            let sortedItemsCurrent = [];
+            const previousYear = new Date();
+            previousYear.setFullYear(previousYear.getFullYear()-1);
+            const dateCurrent = new Date();
+            action.payload.contracts.map((contract) => {
+                let date = new Date(contract.contract.contractDate); 
+                if(previousYear < date && date < dateCurrent){
+                    sortedItemsCurrent.push(contract);
+                }
+            });
             return {
                 ...state,
                 header: action.rowHeader,
                 link: action.link,
                 contracts: action.payload,
-                searchedContracts:  action.payload.contracts,
+                blackList: action.payload.blackListClients,
+                searchedContracts: sortedItemsCurrent,
                 currentTab: action.tab
             };
         case DELETE_ACT:
@@ -115,7 +131,6 @@ export function contractReduser(state = contractState, action){
                 ...state
             }  
         case EDIT_CTC:
-            console.log(action.payload);
             var selectedContract = state.contracts.contracts.findIndex((contract) => 
                 contract.contract.id == action.payload.id);
             const updateContracts = [...state.contracts.contracts];
@@ -125,6 +140,23 @@ export function contractReduser(state = contractState, action){
             }
         case DELETE_CTC:
             return state;
+        case DELETE_CLIENT_FROM_BLACK_LIST:
+            console.log(action.payload)
+            var editedBlackList = state.blackList
+                .filter((client) =>  {
+                return client.id !== action.payload
+            });
+            return{
+                ...state,
+                blackList: editedBlackList
+            }
+        case ADD_CLIENT_TO_BLACK_LIST:
+            const updatedBlackList = [...state.blackList]
+            updatedBlackList.push(action.payload);
+            return{
+                ...state,
+                blackList: updatedBlackList
+            }
         case SORT_CTC:
             var sortedItems = [];
             switch(action.sortType){
@@ -189,6 +221,7 @@ export function contractReduser(state = contractState, action){
             var sortedItems = [];
             let dateFrom = new Date(action.dateFrom);
             let dateTo = new Date(action.dateTo);
+            console.log(dateTo);
             state.contracts.contracts.map((contract) => {
                 let date = new Date(contract.contract.contractDate); 
                 if(dateFrom < date && date < dateTo){

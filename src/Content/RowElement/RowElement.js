@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import '..//RowElement//RowElement.css';
 import readyImage from '..//..//images/ready.png';
 import notReadyImage from '..//..//images/notReady.png';
+import attention from '..//..//images/attentionBlackList.png';
 import notOurDeliveryImage from '..//..//images/delivery.png';
 import ourDeliveryImage from '..//..//images/ourDelivery.png';
 import specificationImage from '..//..//images/specificationImage.png';
@@ -25,7 +26,10 @@ function RowElement(props){
     var mPopupActs = "";
     var mPopupPayments = "";
     var mpopupSign = "";
+    var mpopupReady = "";
     var dropdown = "";
+    var attentionIcon;
+    const defaultDate = "1900-01-01T00:00:00"
     const actToClose = "Акты";
     const paymentToClose = "Оплаты"
 
@@ -48,12 +52,12 @@ function RowElement(props){
     }, [store])
 
     function onReadyClick(id){
-        let signDescription = document.getElementById("signDescription" + props.contract.contract.id);
-        signDescription.textContent = "Готовность договора " + props.contract.contract.description;
+        let readyDescription = document.getElementById("readyDescription" + props.contract.contract.id);
+        readyDescription.textContent = "Готовность заказа " + props.contract.contract.description;
         let bar = document.getElementById('bar');
         bar.classList.add('zindex');
-        mpopupSign = document.getElementById('mpopupSign' + id);
-        mpopupSign.style.display = "block";
+        mpopupReady = document.getElementById('mpopupReady' + id);
+        mpopupReady.style.display = "block";
     }
 
     function onSignClicked(id){
@@ -67,7 +71,7 @@ function RowElement(props){
 
     function specificationClicked(){
         var doc = new DOMParser().parseFromString(props.contract.contract.htmlSpecification, "text/html");
-        if(doc.firstChild.textContent != "null"){
+        if(doc.firstChild.textContent != "null" && doc.firstChild.textContent != ""){
             let specificationDesc = document.getElementById('specificationDesc');
             specificationDesc.textContent = "Спецификация договора " + props.contract.contract.description 
             let bar = document.getElementById('bar');
@@ -140,6 +144,13 @@ function RowElement(props){
         bar.classList.remove('zindex');
     }
 
+    function closeReadyView(){
+        mpopupReady = document.getElementById('mpopupReady' + currentContractId)
+        mpopupReady.style.display = "none"; 
+        let bar = document.getElementById('bar');
+        bar.classList.remove('zindex');
+    }
+
     window.onclick = function(event) {
         if (event.target == mPopupSpecification) {
             closeSpecification();
@@ -153,6 +164,14 @@ function RowElement(props){
             }
         }
     };
+
+    store.blackList.find(element => { 
+        if(element.fK_CompanyID == props.contract.contract.clientId){
+            attentionIcon = true;
+        }    
+    }) 
+
+    var documentSpecification = new DOMParser().parseFromString(props.contract.contract.htmlSpecification, "text/html");
 
     return (
         <div style={{padding: "0px"}}>
@@ -174,14 +193,17 @@ function RowElement(props){
                             onClick={() => onPaymentClicked(props.contract.contract.id)}>Платежи
                         </div>
                         {
-                            store.currentTab == 0 ?  
-                            <div className="dropDownMenuItem"
-                                onClick={() => onSignClicked(props.contract.contract.id)}>Подписание
-                            </div> :
-                            <div className="dropDownMenuItem"
-                                onClick={() => onReadyClick(props.contract.contract.id)}>Готовность
+                            store.currentTab == 0 ?
+                            <div>
+                                <div className="dropDownMenuItem"
+                                    onClick={() => onSignClicked(props.contract.contract.id)}>Отметка о подписи
+                                </div>
                             </div>
-                        }
+                            : 
+                            <div className="dropDownMenuItem"
+                                onClick={() => onReadyClick(props.contract.contract.id)}>Отметка о готовности
+                            </div>
+                        } 
                     </div>
                 </div>
                 <div title={props.contract.contract.description} className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
@@ -191,7 +213,12 @@ function RowElement(props){
                 <div title={clientName}
                     className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
                     style={{minWidth: "80px", margin: "auto 0px", maxWidth: "300px"}}>
-                    {clientName}
+                    {clientName} 
+                    {
+                        attentionIcon ?  
+                        <img style={{padding: "2px", margin: "5px 5px", width: "25px", height: "25px" }} src={attention} title="Черный список клиентов!"></img>
+                        : <div></div> 
+                    }
                 </div>
                 <div title={props.contract.contract.contractNumber} className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
                     style={{minWidth: "80px", margin: "auto 0px", maxWidth: "100px"}}>
@@ -215,6 +242,8 @@ function RowElement(props){
                 </div>
                 <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" id="statusImg" 
                     src={props.contract.contract.signatureMark ? readyImage : notReadyImage} 
+                    title={props.contract.contract.signDate > defaultDate ? 
+                        "Дата подписи " + props.contract.contract.signDate.split('T')[0].split('-').reverse().join('.') : ""}
                     style={{minWidth: "50px", maxWidth: "50px"}}></img>
                 <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" id="statusImg" 
                     src={props.contract.contract.readyMark ? readyImage : notReadyImage} 
@@ -222,15 +251,20 @@ function RowElement(props){
                 <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" id="statusImg" 
                     src={props.contract.contract.ourDelivery ? ourDeliveryImage : notOurDeliveryImage} 
                     style={{minWidth: "50px", maxWidth: "50px"}}></img>
-                <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
-                    style={{padding: "5px", minWidth: "50px", maxWidth: "50px"}}
-                    onClick={() => specificationClicked()}>
-                    <img className="click-style" id="specImg" 
-                        src={specificationImage}
-                        title="Спецификация"
-                        >
-                    </img>
-                </div>
+                {
+                    documentSpecification.firstChild.textContent != "null" && documentSpecification.firstChild.textContent != "" ? 
+                    (<div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
+                        style={{padding: "5px", minWidth: "50px", maxWidth: "50px"}}
+                        onClick={() => specificationClicked()}>
+                            <img className="click-style" id="specImg" 
+                                src={specificationImage}
+                                title="Спецификация"
+                                >
+                            </img>
+                        </div>)
+                    :
+                    (<div></div>)
+                }
             </div>
             <div id="mpopupBox" class="mPopupSpecification">
                 <div className="modal-background-specification">
@@ -270,12 +304,19 @@ function RowElement(props){
                         <img className="close-img" src={close} width={"40px"} height={"40px"}
                                 onClick={() =>{ closeSignView() }}></img>
                     </div>
-                    {
-                        store.currentTab == 0 ? 
-                        <SignContract contractDescription={props.contract.contract} id={props.contract.contract.id}></SignContract> :
-                        <ReadyContract contractDescription={props.contract.contract} id={props.contract.contract.id}></ReadyContract>
-                    }
-                    
+                        <SignContract contractDescription={props.contract.contract} id={props.contract.contract.id}></SignContract> 
+                    </div>
+            </div>
+            <div id={"mpopupReady" + props.contract.contract.id} class="mPopupSpecification">
+                <div className="modal-background-sign">
+                    <div className="specification-description">
+                        <div id={"readyDescription" + props.contract.contract.id}></div>
+                        <img className="close-img" src={close} width={"40px"} height={"40px"}
+                                onClick={() =>{ closeReadyView() }}></img>
+                    </div> 
+                        <ReadyContract contractDescription={props.contract.contract}
+                            id={props.contract.contract.id}></ReadyContract>
+                   
                 </div>
             </div>
         </div>

@@ -16,22 +16,26 @@ export const VIEW_ACT = "VIEW_ACT";
 export const ADD_ACT = "ADD_ACT"; 
 export const EDIT_ACT = "EDIT_ACT";
 export const DELETE_ACT = "DELETE_ACT";
+//Black List of clients 
+export const ADD_CLIENT_TO_BLACK_LIST = "ADD_CLIENT_TO_BLACK_LIST";
+export const DELETE_CLIENT_FROM_BLACK_LIST = "DELETE_CLIENT_FROM_BLACK_LIST";
 //Other constants
+export const isExistOnBlackList = "Невозможно добавить клиента, так как он уже в черном списке!";
 export const jsonHeaderRegistry = {
     id:1,
     notes:"",
     description:"Наименование договора",
     client:"Заказчик",
-    contractNumber:"Номер договора",
-    contractDate:"Дата договора",
+    contractNumber:"Номер",
+    contractDate:"Дата",
     clientId:1,
-    amount:"Сумма договора",
-    percent:"Процент оплаты",
+    amount:"Сумма",
+    percent:"Оплата %",
     termsOfPaymentId:3,
-    signatureMark:"Отметка о подписи",
-    readyMark:"Отметка о готовности",
+    signatureMark:"Подпись",
+    readyMark:"Готовность",
     deadlineCondition:"Срок поставки",
-    ourDelivery:"Наша доставка",
+    ourDelivery:"Доставка",
     comment:null,
     htmlSpecification:null
   }
@@ -41,16 +45,16 @@ export const jsonHeaderRegistry = {
     notes:"",
     description:"Наименование договора",
     client:"Заказчик",
-    contractNumber:"Номер договора",
-    contractDate:"Дата договора",
+    contractNumber:"Номер",
+    contractDate:"Дата",
     clientId:1,
-    amount:"Сумма договора",
-    percent:"Процент оплаты",
+    amount:"Сумма",
+    percent:"Оплата %",
     termsOfPaymentId:3,
-    signatureMark:"Отметка о подписи",
-    readyMark:"Отметка о готовности",
+    signatureMark:"Подпись",
+    readyMark:"Готовность",
     deadlineCondition:"Срок поставки",
-    ourDelivery:"Наша доставка",
+    ourDelivery:"Доставка",
     comment:null,
     htmlSpecification:null
   }

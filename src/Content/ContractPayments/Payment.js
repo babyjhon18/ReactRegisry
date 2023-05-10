@@ -7,10 +7,7 @@ import { DELETE_PAYM, EDIT_PAYM } from '../../Constants';
 
 function Payment(props){
 
-    const [date, setDateFormat] = useState();
-    const dispatch = useDispatch();
-    const [dateTime, setDate] = useState(new Date());
-    const store = useSelector(state => state.contractReduser)
+    
 
     function deletePayment(paymentInfo){
         fetch('http://37.17.58.180:8087/api/Payments?paymentId=' + paymentInfo.payment.id, 
@@ -50,6 +47,11 @@ function Payment(props){
     const handleInputChange = (e) => {
         setDate(e.target.value)
     }
+
+    const [date, setDateFormat] = useState();
+    const dispatch = useDispatch();
+    const [dateTime, setDate] = useState(new Date());
+    const store = useSelector(state => state.contractReduser)
 
     useEffect(() => {
         setDate(props.payment.paymentDate.split('T')[0]);
