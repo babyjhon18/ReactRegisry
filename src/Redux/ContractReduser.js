@@ -161,7 +161,7 @@ export function contractReduser(state = contractState, action){
             var sortedItems = [];
             switch(action.sortType){
                 case 0: 
-                    sortedItems = state.contracts.contracts.sort(function(a, b){
+                    sortedItems = state.searchedContracts.sort(function(a, b){
                         if(action.sortDirection){
                             return (a.contract.readyMark === b.contract.readyMark) ? 0 : a.contract.readyMark ? 1 : -1;
                         }
@@ -171,7 +171,7 @@ export function contractReduser(state = contractState, action){
                     });
                     break;
                 case 1: 
-                    sortedItems = state.contracts.contracts.sort(function(a, b){
+                    sortedItems = state.searchedContracts.sort(function(a, b){
                         if(action.sortDirection){
                             return (a.contract.signatureMark === b.contract.signatureMark) ? 0 : a.contract.signatureMark ? 1 : -1;
                         }
@@ -181,7 +181,7 @@ export function contractReduser(state = contractState, action){
                     });
                     break;
                 case 2: 
-                    sortedItems = state.contracts.contracts.sort(function(a, b){
+                    sortedItems = state.searchedContracts.sort(function(a, b){
                         if(action.sortDirection){
                             return (a.contract.ourDelivery === b.contract.ourDelivery) ? 0 : a.contract.ourDelivery ? 1 : -1;
                         }
@@ -191,7 +191,7 @@ export function contractReduser(state = contractState, action){
                     });
                     break;
                 case 3: 
-                    sortedItems = state.contracts.contracts.sort(function(a, b){
+                    sortedItems = state.searchedContracts.sort(function(a, b){
                         if(a.contract.contractDate > b.contract.contractDate){
                             return action.sortDirection ? 1 : -1;
                         }
@@ -202,7 +202,7 @@ export function contractReduser(state = contractState, action){
                     });
                     break;
                 case 4:
-                    sortedItems = state.contracts.contracts.sort(function (a, b) {
+                    sortedItems = state.searchedContracts.sort(function (a, b) {
                         if (a.contract.description < b.contract.description) {
                             return action.sortDirection ? 1 : -1;
                         }

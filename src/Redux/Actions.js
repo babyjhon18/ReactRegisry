@@ -42,11 +42,11 @@ export function SearchContract(contracts, keyword, index){
     }
 }
 
-export function Sort(sortDirection, sortType){
+export function Sort(sortDirection, sortType, currentcontracts){
     return {
         type: SORT_CTC,
         sortDirection: sortDirection,
-        sortType: sortType
+        sortType: sortType,
     }
 }
 
