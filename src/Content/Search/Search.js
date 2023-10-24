@@ -162,7 +162,7 @@ function Search(){
             </Dropdown>
         </div>
         <div class="sortBtn">
-            <img onClick={sortClick} src={sortUp}></img>
+            <img style={{margin: "2px"}} onClick={sortClick} src={sortUp}></img>
         </div>
     </div>);
 }

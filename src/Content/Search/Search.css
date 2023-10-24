@@ -49,14 +49,13 @@ button:hover{
 }
 
 .sortBtn{
-    height: 35px;
-    line-height: 35px;  
-    width: 35px;  
-    border-radius: 50%;
+    height: 40px;
+    line-height: 40px;  
+    width: 40px;  
+    border-radius: 40%;
     background-color: transparent;
     color: white;
     cursor: pointer;
-    margin: 5px;
     vertical-align: middle;
 }
 

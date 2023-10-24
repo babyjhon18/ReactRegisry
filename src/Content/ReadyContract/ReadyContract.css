@@ -11,6 +11,13 @@
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 }
 
+.mainReady{
+    border-bottom: 2px solid #377AB7;
+    border-right: 2px solid #377AB7;
+    border-left: 2px solid #377AB7;
+    border-radius: 0px 0px 5px 5px;
+}
+
 .checkInput{
     margin: auto 0px;
     border-radius: 3px;

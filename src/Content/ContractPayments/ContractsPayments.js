@@ -30,8 +30,8 @@ function ContractsPayments(props){
         }
     }
 
-    return(<div>
-        <div className='addNewAct'>
+    return(<div className='mainPayments'>
+        <div className='addNewPayment'>
                 <div style={{margin: "5px 5px", display: "flex", justifyContent: "flex-start"}}>
                     <button type="button" id="addButton" 
                         className="btn" 

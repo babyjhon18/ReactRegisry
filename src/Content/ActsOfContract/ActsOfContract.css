@@ -7,6 +7,13 @@
     border-radius: 5px 5px 5px 5px;
 }
 
+.mainActs{
+    border-bottom: 2px solid #377AB7;
+    border-right: 2px solid #377AB7;
+    border-left: 2px solid #377AB7;
+    border-radius: 0px 0px 5px 5px;
+}
+
 .NumberContractInput{
     margin: 10px;
     border-radius: 3px;

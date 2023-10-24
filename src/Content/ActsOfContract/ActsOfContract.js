@@ -27,7 +27,7 @@ function ActsOfContract(props){
         }
     }
     
-    return(<div>
+    return(<div className='mainActs'>
             <div className='addNewAct'>
                 <div style={{margin: "5px 5px", display: "flex", justifyContent: "flex-start"}}>
                     <button type="button" id="addButton" 

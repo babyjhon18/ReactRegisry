@@ -235,24 +235,24 @@ export function contractReduser(state = contractState, action){
         case SEARCH_CTC:
             switch(action.index){ 
                 case 0:
-                    var searchedItems = state.contracts.contracts.filter((element) => {
+                    var searchedItems = state.searchedContracts.filter((element) => {
                         let finalRes = element.contract.description.toLowerCase();
                         return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
                     });
                     break;
                 case 1: 
-                    var finalResult = state.contracts.clients.filter(client => {
+                    var finalResult = state.searchedContracts.filter(client => {
                         let finalRes = client.name.toLowerCase(); 
                         return finalRes.indexOf(action.keyword.toLowerCase()) !== -1;
                     });
-                    var searchedItems = state.contracts.contracts.filter((element) => {
+                    var searchedItems = state.searchedContracts.filter((element) => {
                         return finalResult.some((f) => {
                             return f.id == element.contract.clientId;
                         });
                     });
                     break;
                 case 2:
-                    var searchedItems = state.contracts.contracts.filter((element) => {
+                    var searchedItems = state.searchedContracts.filter((element) => {
                         let finalRes = element.contract.contractNumber.toLowerCase();
                         return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
                     });

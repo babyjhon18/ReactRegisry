@@ -38,7 +38,7 @@ function RowElement(props){
         formattedDate = formattedDate.split('-').reverse().join('.');
         store.contracts.clients.find(element => { 
             if(element.id == props.contract.contract.clientId){
-                setClientName(element.name);
+                setClientName(element.fullName);
             }  
         })
         setDateFormat(formattedDate);

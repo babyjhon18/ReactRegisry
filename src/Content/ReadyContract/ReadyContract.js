@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { EDIT_CTC } from '../../Constants';
-import '..//SignContract//SignContract.css';    
+import '..//ReadyContract//ReadyContract.css';    
 
 function ReadyContract(props){
 
@@ -35,7 +35,7 @@ function ReadyContract(props){
     }
 
     return(
-        <div>
+        <div className='mainReady'>
              <div className='addNewAct' id={props.id}>
              <div className="row" style={{margin: "5px 0px"}}>
                     Комментарий к производству: {(props.contractDescription.comment !== "" &&

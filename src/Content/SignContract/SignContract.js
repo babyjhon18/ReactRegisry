@@ -47,7 +47,7 @@ function SignContract(props){
     }
 
     return(
-        <div>
+        <div className='mainSign'>
              <div className='addNewAct' id={props.id}>
                 {
                     props.contractDescription.signatureMark ? (
