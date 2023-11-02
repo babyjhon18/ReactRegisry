@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import BlackListItem from "../BlackList/BlackListItem.js";
 import "./BlackList.css";
 import { useState } from "react";
-import { isExistOnBlackList, ADD_CLIENT_TO_BLACK_LIST } from "../../Constants.js";
+import { isExistOnBlackList, ADD_CLIENT_TO_BLACK_LIST, SERVER_LINK, CREATE_GET_BLACK_LIST } from "../../Constants.js";
 
 function BlackList(){
 
@@ -28,7 +28,7 @@ function BlackList(){
         var isExists = blackList.contracts.blackListClients.findIndex((client) => client.fK_CompanyID == fK_CompanyID);
         if(isExists == -1){
             setError("none")
-            var data = await fetch('http://37.17.58.180:8087/api/BlackListCompanies', {
+            var data = await fetch(SERVER_LINK + CREATE_GET_BLACK_LIST, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

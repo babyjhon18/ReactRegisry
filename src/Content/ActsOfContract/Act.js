@@ -2,7 +2,7 @@ import './Act.css';
 import { useEffect, useState } from 'react';
 import penImage from '..//..//images/penEdit.png';
 import deleteImage from '..//..//images/trashCanDelete.png';
-import { DELETE_ACT, EDIT_ACT } from '../../Constants';
+import { DELETE_ACT, DELETE_UPDATE_ACT, EDIT_ACT, SERVER_LINK } from '../../Constants';
 import { useDispatch, useSelector } from 'react-redux';
 
 function Act(props){
@@ -13,7 +13,7 @@ function Act(props){
     const store = useSelector(state => state.contractReduser);
 
     function deleteActs(actInfo){
-        fetch('http://37.17.58.180:8087/api/Acts?actId=' + actInfo.act.id, { method: 'DELETE' }).then((responce) => {
+        fetch(SERVER_LINK + DELETE_UPDATE_ACT + actInfo.act.id, { method: 'DELETE' }).then((responce) => {
             dispatch({type: DELETE_ACT, payload: actInfo})
         });  
     }
@@ -29,7 +29,8 @@ function Act(props){
         let actDate = document.getElementById('actDate' + props.act.id).value;
         let actNum = document.getElementById('actNum' + props.act.id).value;
         let dataToSend = {id: props.act.id, actNumber: actNum, actDate: actDate + "T00:00:00", fK_ContractId: props.act.fK_ContractId}
-        var data = await fetch('http://37.17.58.180:8087/api/Acts?actId=' + props.act.id, {
+        console.log(dataToSend);
+        var data = await fetch(SERVER_LINK + DELETE_UPDATE_ACT + props.act.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

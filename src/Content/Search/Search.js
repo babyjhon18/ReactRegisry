@@ -44,7 +44,7 @@ function Search(){
     const searchFieldChange = event => {
         setSearchInputValue(event.target.value); 
         if(event.target.value == ""){
-            dispatch({type: SEARCH_CTC, keyword: event.target.value, index: 0}); 
+            dispatch({type: SEARCH_CTC, keyword: event.target.value, index: 3}); 
         }
     }
 

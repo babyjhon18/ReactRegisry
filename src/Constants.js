@@ -1,3 +1,19 @@
+//Links----------------------------------
+//Server string
+export const SERVER_LINK = "http://192.168.111.141:8087/api";
+//Acts
+export const DELETE_UPDATE_ACT = "/Acts?actId=";
+export const CREATE_GET_ACT = "/Acts";
+//BlackList
+export const CREATE_GET_BLACK_LIST = "/BlackListCompanies";
+export const DELETE_UPDATE_BLACK_LIST = "/BlackListCompanies?companyId=";
+//Contracts
+export const CREATE_GET_CONTRACT = "/Contracts";
+export const DELETE_UPDATE_CONTRACT = "/Contracts?contractId="
+//Payments
+export const CREATE_GET_PAYMENTS = "/Payments";
+export const DELETE_UPDATE_PAYMENTS = "/Payments?paymentId="
+//Methods--------------------------------
 //Contracts
 export const VIEW_CTC = "VIEW_CTC";
 export const UPDATE_CTC_VIEW = "UPDATE_CTC_VIEW"

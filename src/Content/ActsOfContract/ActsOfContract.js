@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { ADD_ACT } from '../../Constants';
+import { ADD_ACT, CREATE_GET_ACT, SERVER_LINK } from '../../Constants';
 import '..//ActsOfContract//ActsOfContract.css';
 import Act from '../ActsOfContract/Act.js'
 
@@ -11,7 +11,7 @@ function ActsOfContract(props){
         let actDate = document.getElementById('actDate' + id).value;
         let actNum = document.getElementById('actNum' + id).value;
         let data = {actNumber: actNum, actDate: actDate + "T00:00:00", fK_ContractId: props.id}
-        const dataNew = await fetch('http://37.17.58.180:8087/api/Acts', {
+        const dataNew = await fetch(SERVER_LINK + CREATE_GET_ACT, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

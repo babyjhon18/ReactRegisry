@@ -20,7 +20,7 @@ import { FaRegCalendarAlt } from "react-icons/fa";
 import { ImBooks } from "react-icons/im";
 import { BsExclamationCircleFill } from "react-icons/bs";
 //import constants
-import { jsonHeaderRegistry, jsonHeaderWorkPlan, UPDATE_CTC_VIEW } from '../../Constants';
+import { CREATE_GET_CONTRACT, jsonHeaderRegistry, jsonHeaderWorkPlan, SERVER_LINK, UPDATE_CTC_VIEW } from '../../Constants';
 import close from '..//..//images/close.png';
 import BlackList from '../BlackList/BlackList';
 
@@ -35,7 +35,7 @@ function Body() {
   var mPopupBlackList = document.getElementById('mpopupBlackListId');
 
   useEffect(() => {
-    fetchData('http://37.17.58.180:8087/api/Contracts', 0, jsonHeaderRegistry);
+    fetchData(SERVER_LINK + CREATE_GET_CONTRACT, 0, jsonHeaderRegistry);
   }, []);
 
   const onMouseOn = () => {
@@ -83,11 +83,11 @@ function Body() {
           <Menu iconShape="square">
             <MenuItem
             active={activate === 0} 
-            onClick={() => fetchData('http://37.17.58.180:8087/api/Contracts', 0, jsonHeaderRegistry)} 
+            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT, 0, jsonHeaderRegistry)} 
             icon={<ImBooks />}>Реестр договоров</MenuItem>
             <MenuItem 
             active={activate === 1} 
-            onClick={() => fetchData('http://37.17.58.180:8087/api/Contracts?isReadyForAssemble=true', 1, jsonHeaderWorkPlan)} 
+            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?isReadyForAssemble=true', 1, jsonHeaderWorkPlan)} 
             icon={<FaRegCalendarAlt />}>План работ</MenuItem>
           </Menu>
         </SidebarContent>

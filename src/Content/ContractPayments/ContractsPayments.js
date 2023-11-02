@@ -1,6 +1,6 @@
 import './ContractsPayments.css';
 import Payment from '../ContractPayments/Payment.js'
-import { ADD_PAYM } from '../../Constants';
+import { ADD_PAYM, CREATE_GET_PAYMENTS, SERVER_LINK } from '../../Constants';
 import { useDispatch } from 'react-redux';
 
 function ContractsPayments(props){
@@ -13,7 +13,7 @@ function ContractsPayments(props){
         let paymnetSum = document.getElementById('paymentSum' + id).value;
         let data = {paymentDate: paymentDate + "T00:00:00", paymentNumber: paymentNum,
              paymentSum: paymnetSum, fK_ContractId: props.id}
-        const dataNew = await fetch('http://37.17.58.180:8087/api/Payments', {
+        const dataNew = await fetch(SERVER_LINK + CREATE_GET_PAYMENTS, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

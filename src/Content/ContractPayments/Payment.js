@@ -3,14 +3,14 @@ import penImage from '..//..//images/penEdit.png';
 import deleteImage from '..//..//images/trashCanDelete.png';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { DELETE_PAYM, EDIT_PAYM } from '../../Constants';
+import { DELETE_PAYM, EDIT_PAYM, SERVER_LINK, DELETE_UPDATE_PAYMENTS } from '../../Constants';
 
 function Payment(props){
 
     
 
     function deletePayment(paymentInfo){
-        fetch('http://37.17.58.180:8087/api/Payments?paymentId=' + paymentInfo.payment.id, 
+        fetch(SERVER_LINK + DELETE_UPDATE_PAYMENTS + paymentInfo.payment.id, 
             { method: 'DELETE' }).then((responce) => {
             dispatch({type: DELETE_PAYM, payload: paymentInfo})
         });  
@@ -29,7 +29,7 @@ function Payment(props){
         let paymnetSum = document.getElementById('paymentSum' + props.payment.id).value;
         let dataToSend = {id: props.payment.id, paymentDate: paymentDate + "T00:00:00", paymentNumber: paymentNum,
              paymentSum: paymnetSum, fK_ContractId: props.payment.fK_ContractId}
-        var data = await fetch('http://37.17.58.180:8087/api/Payments?paymentId=' + props.payment.id, {
+        var data = await fetch(SERVER_LINK + DELETE_UPDATE_PAYMENTS + props.payment.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { EDIT_CTC } from '../../Constants';
+import { DELETE_UPDATE_CONTRACT, EDIT_CTC, SERVER_LINK } from '../../Constants';
 import '..//ReadyContract//ReadyContract.css';    
 
 function ReadyContract(props){
@@ -15,12 +15,12 @@ function ReadyContract(props){
         contract.readyMark = readyToWork.checked;
         let dataToSend = contract;
         let clientIndex = clients.contracts.clients.findIndex((client) => client.id == contract.clientId);
-        let clientName = clients.contracts.clients[clientIndex].name;
+        let clientName = clients.contracts.clients[clientIndex].fullName;
         let termIndex = clients.contracts.termsOfPayment.findIndex((paym) => paym.id == contract.termsOfPaymentId);
         let termsOfPaymentName = clients.contracts.termsOfPayment[termIndex].name;
         dataToSend.clientName = clientName;
         dataToSend.termsOfPaymentName = termsOfPaymentName;
-        var data = await fetch('http://37.17.58.180:8087/api/Contracts?contractId=' + contract.id, {
+        var data = await fetch(SERVER_LINK + DELETE_UPDATE_CONTRACT + contract.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

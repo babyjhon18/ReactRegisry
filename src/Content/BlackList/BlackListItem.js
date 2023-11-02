@@ -1,13 +1,13 @@
 import { useDispatch } from 'react-redux';
 import deleteImage from '..//..//images/trashCanDelete.png';
-import { DELETE_CLIENT_FROM_BLACK_LIST } from '../../Constants';
+import { DELETE_CLIENT_FROM_BLACK_LIST, SERVER_LINK, DELETE_UPDATE_BLACK_LIST } from '../../Constants';
 
 function BlackListItem(props){
 
     const dispatch = useDispatch();
 
     function DeleteFromBlackList(id){
-        fetch('http://37.17.58.180:8087/api/BlackListCompanies?companyId=' + id, { method: 'DELETE' })
+        fetch(SERVER_LINK + DELETE_UPDATE_BLACK_LIST + id, { method: 'DELETE' })
             .then((responce) => {
             if(responce.status == 200){
                 dispatch({type: DELETE_CLIENT_FROM_BLACK_LIST, payload: id})

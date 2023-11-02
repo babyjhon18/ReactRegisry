@@ -14,7 +14,9 @@ import {
     EDIT_PAYM,
     SORT_BY_DATE,
     ADD_CLIENT_TO_BLACK_LIST,
-    DELETE_CLIENT_FROM_BLACK_LIST
+    DELETE_CLIENT_FROM_BLACK_LIST,
+    SERVER_LINK,
+    CREATE_GET_CONTRACT
 } from '../Constants';
 import axios from 'axios';
 
@@ -33,9 +35,9 @@ function getContracts(link){
 
 const contractState = {
     active: 0,
-    link: 'http://37.17.58.180:8087/api/Contracts',
+    link: SERVER_LINK + CREATE_GET_CONTRACT,
     header: jsonHeaderRegistry,
-    contracts: getContracts('http://37.17.58.180:8087/api/Contracts'),
+    contracts: getContracts(SERVER_LINK + CREATE_GET_CONTRACT),
     searchedContracts: contracts,
     blackList: blackList,
     currentTab: 0,
@@ -256,6 +258,9 @@ export function contractReduser(state = contractState, action){
                         let finalRes = element.contract.contractNumber.toLowerCase();
                         return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
                     });
+                    break;
+                case 3:
+                    var searchedItems = state.contracts.contracts;
                     break;
             }
             console.log(searchedItems);
