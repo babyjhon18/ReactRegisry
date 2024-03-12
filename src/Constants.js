@@ -1,6 +1,10 @@
 //Links----------------------------------
 //Server string
+// export const SERVER_LINK = "https://localhost:44388/api";
 export const SERVER_LINK = "http://192.168.111.141:8087/api";
+//Dictionary
+export const TEMPLATE_LINK = "/Dictionary/GetTemplate"
+export const NOTIFICATION_LINK = "/Dictionary/SendEmail"
 //Acts
 export const DELETE_UPDATE_ACT = "/Acts?actId=";
 export const CREATE_GET_ACT = "/Acts";
@@ -35,6 +39,8 @@ export const DELETE_ACT = "DELETE_ACT";
 //Black List of clients 
 export const ADD_CLIENT_TO_BLACK_LIST = "ADD_CLIENT_TO_BLACK_LIST";
 export const DELETE_CLIENT_FROM_BLACK_LIST = "DELETE_CLIENT_FROM_BLACK_LIST";
+//MessagesReduser
+export const SET_MESSAGE_STATE = "SET_MESSSAGE_STATE"
 //Other constants
 export const isExistOnBlackList = "Невозможно добавить клиента, так как он уже в черном списке!";
 export const jsonHeaderRegistry = {
@@ -42,13 +48,14 @@ export const jsonHeaderRegistry = {
     notes:"",
     description:"Наименование договора",
     client:"Заказчик",
-    contractNumber:"Номер",
+    contractNumber:"Договор №",
     contractDate:"Дата",
     clientId:1,
     amount:"Сумма",
     percent:"Оплата %",
     termsOfPaymentId:3,
-    signatureMark:"Подпись",
+    signatureMark:"В работе",
+    sawContract: "Подпись",
     readyMark:"Готовность",
     deadlineCondition:"Срок поставки",
     ourDelivery:"Доставка",
@@ -56,12 +63,12 @@ export const jsonHeaderRegistry = {
     htmlSpecification:null
   }
 
-  export const jsonHeaderWorkPlan = {
+  export const jsonHeaderShouldBePaid = {
     id:1,
     notes:"",
     description:"Наименование договора",
     client:"Заказчик",
-    contractNumber:"Номер",
+    contractNumber:"Договор №",
     contractDate:"Дата",
     clientId:1,
     amount:"Сумма",
@@ -69,8 +76,31 @@ export const jsonHeaderRegistry = {
     termsOfPaymentId:3,
     signatureMark:"Подпись",
     readyMark:"Готовность",
-    deadlineCondition:"Срок поставки",
+    deadlineCondition:"Срок оплаты",
     ourDelivery:"Доставка",
     comment:null,
     htmlSpecification:null
   }
+
+  export const jsonHeaderWorkPlan = {
+    id:1,
+    notes:"Заметки",
+    description:"Наименование договора",
+    deviceType: "Оборудование",
+    client:"Заказчик",
+    contractNumber:"№",
+    contractDate:"Дата",
+    deadLineDate: "Отгрузка",
+    clientId:1,
+    amount:"Сумма",
+    percent:"%",
+    termsOfPaymentId:"Условия оплаты",
+    signatureMark:"Подпись",
+    readyMark:"Готовность",
+    deadlineCondition:"До",
+    deadLineSetted: "Срок поставки",
+    ourDelivery:"Доставка",
+    comment:null,
+    htmlSpecification:null
+  }
+  

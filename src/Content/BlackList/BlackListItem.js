@@ -20,8 +20,8 @@ function BlackListItem(props){
             <div className='col-md-12 col-sm-12 col-lg-12 col-xs-12 col-xl-12 row actRow' style={{margin: "0px"}}>
                 <div className="col-md-8 col-sm-8 col-lg-8 col-xs-8 col-xl-8 row">
                     <div
-                        className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign" 
-                        style={{minWidth: "200px", margin: "auto 0px", maxWidth: "200px"}}>
+                        className="col-md-6 col-sm-6 col-lg-6 col-xs-6 col-xl-6 textAlign" 
+                        style={{minWidth: "400px", margin: "auto 0px", maxWidth: "450px"}}>
                         {props.props.companyName}
                     </div>
                 </div>

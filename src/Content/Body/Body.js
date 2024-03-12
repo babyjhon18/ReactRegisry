@@ -15,14 +15,20 @@ import {
   SidebarContent,
 } from "react-pro-sidebar";
 import RowElement from '../RowElement/RowElement'
+import WorkPlanRowElement from '../WorkPlanRows/WorkPlanRowElement'
 import RowHeader from '../RowHeader/RowHeader'
-import { FaRegCalendarAlt } from "react-icons/fa";
+import WorkPlanHeader from '../WorkPlanHeader/WorkPlanHeader'
+import { FaRegCalendarAlt, FaArchive } from "react-icons/fa";
+import { BsPatchCheckFill } from "react-icons/bs";
 import { ImBooks } from "react-icons/im";
+import { GiReceiveMoney } from "react-icons/gi";
 import { BsExclamationCircleFill } from "react-icons/bs";
 //import constants
-import { CREATE_GET_CONTRACT, jsonHeaderRegistry, jsonHeaderWorkPlan, SERVER_LINK, UPDATE_CTC_VIEW } from '../../Constants';
+import { CREATE_GET_CONTRACT, jsonHeaderRegistry, jsonHeaderShouldBePaid, jsonHeaderWorkPlan, SERVER_LINK, UPDATE_CTC_VIEW } from '../../Constants';
 import close from '..//..//images/close.png';
 import BlackList from '../BlackList/BlackList';
+import { COLOR } from 'rsuite/esm/utils/constants';
+import UnpaidRowElement from '../UnpaidRowElement/UnpaidRowElement';
 
 function Body() {  
 
@@ -87,8 +93,20 @@ function Body() {
             icon={<ImBooks />}>Реестр договоров</MenuItem>
             <MenuItem 
             active={activate === 1} 
-            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?isReadyForAssemble=true', 1, jsonHeaderWorkPlan)} 
+            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=1', 1, jsonHeaderWorkPlan)} 
             icon={<FaRegCalendarAlt />}>План работ</MenuItem>
+            <MenuItem 
+            active={activate === 4} 
+            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=4', 4, jsonHeaderRegistry)} 
+            icon={<BsPatchCheckFill />}>Готовые</MenuItem>
+            <MenuItem 
+            active={activate === 2} 
+            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=2', 2, jsonHeaderShouldBePaid)} 
+            icon={<GiReceiveMoney />}>Неоплаченные</MenuItem>
+            <MenuItem 
+            active={activate === 3} 
+            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=3', 3, jsonHeaderRegistry)} 
+            icon={<FaArchive />}>Архив</MenuItem>
           </Menu>
         </SidebarContent>
         <SidebarFooter>
@@ -113,12 +131,21 @@ function Body() {
     </div>
     <div id="mainBody">
         <div id="row" className='row'>
-          <RowHeader contract={header}></RowHeader>
+          {
+            c.currentTab == 1 ? 
+            <WorkPlanHeader contract={header}></WorkPlanHeader> : <RowHeader contract={header}></RowHeader> 
+          }
         </div>  
             {c.searchedContracts && c.searchedContracts.map((contract, index) =>
               (
                 <div className='row'>
-                  <RowElement key={index} contract={contract}></RowElement>
+                  {
+                    c.currentTab == 1 ? 
+                    <WorkPlanRowElement key={index} contract={contract}></WorkPlanRowElement> : 
+                    c.currentTab == 2 ?
+                    <UnpaidRowElement key={index} contract={contract}></UnpaidRowElement> : 
+                    <RowElement key={index} contract={contract}></RowElement>
+                  }
                 </div>
               )
             )}

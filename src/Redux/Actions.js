@@ -1,4 +1,19 @@
-import { VIEW_CTC, UPDATE_CTC_VIEW,EDIT_CTC, DELETE_CTC, SEARCH_CTC, SORT_CTC, ADD_ACT, DELETE_ACT, ADD_PAYM, EDIT_ACT, EDIT_PAYM, SORT_BY_DATE, ADD_CLIENT_TO_BLACK_LIST, DELETE_CLIENT_FROM_BLACK_LIST } from "../Constants"
+import { 
+    VIEW_CTC,
+    UPDATE_CTC_VIEW,
+    EDIT_CTC,
+    DELETE_CTC,
+    SEARCH_CTC,
+    SORT_CTC,
+    ADD_ACT,
+    DELETE_ACT,
+    ADD_PAYM,
+    EDIT_ACT,
+    EDIT_PAYM,
+    SORT_BY_DATE,
+    ADD_CLIENT_TO_BLACK_LIST,
+    DELETE_CLIENT_FROM_BLACK_LIST
+ } from "../Constants"
 
 export function ViewContracts(contractList, link, header){
     return {

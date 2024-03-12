@@ -1,23 +1,27 @@
 import React, { useEffect, useState } from "react";
-import '..//RowElement//RowElement.css';
-import readyImage from '..//..//images/ready.png';
-import notReadyImage from '..//..//images/notReady.png';
+import './WorkPlanRowElement.css';
 import attention from '..//..//images/attentionBlackList.png';
 import notOurDeliveryImage from '..//..//images/delivery.png';
 import ourDeliveryImage from '..//..//images/ourDelivery.png';
 import specificationImage from '..//..//images/specificationImage.png';
 import settings from '..//..//images/settings.png';
 import close from '..//..//images/close.png';
+import alarm from '..//..//images/alarm.png';
 import { useSelector } from "react-redux";
-import ActOfContract from '..//ActsOfContract//ActsOfContract';
-import ContractsPayments from '..//ContractPayments//ContractsPayments';
+import ActOfContract from '../ActsOfContract/ActsOfContract';
+import ContractsPayments from '../ContractPayments/ContractsPayments';
 import SignContract from "../SignContract/SignContract";
 import ReadyContract from "../ReadyContract/ReadyContract";
+import ManufacturerNotes from "../ManufacturerNotes/ManufacturerNotes"
+import * as formulajs from '@formulajs/formulajs'
 
-function RowElement(props){  
+//0 день - день отгрузки! Считать включая текущий день!
+function WorkPlanRowElement(props){  
 
-    const [date, setDateFormat] = useState();
-    const [clientName, setClientName] = useState();
+    const [finalDate, setFinalDateFormat] = useState();
+    const [clientName, setClientName] = useState(); 
+    const [termsOfPaymentName, setTermsOfPaymentName] = useState(); 
+    const [daysLeft, setDaysLeft] = useState();
     const [paymentPercent, setPaymentPercent] = useState();
     const store = useSelector(state => state.contractReduser)
 
@@ -29,19 +33,59 @@ function RowElement(props){
     var mpopupReady = "";
     var dropdown = "";
     var attentionIcon;
-    const defaultDate = "1900-01-01T00:00:00"
+    var startDateDeadLineDate = new Date(props.contract.contract.signDate);
+    var currentDay = new Date();
+    var finalDateDeadLineDate = new Date(props.contract.contract.signDate);
+    var finalDateDeadLineDateFormated = new Date(props.contract.contract.signDate);
+    var bgNotesColor = props.contract.contract.manufacturingLeadNoteColor;
     const actToClose = "Акты";
     const paymentToClose = "Оплаты"
 
     useEffect(() =>{
+        startDateDeadLineDate.toLocaleDateString('en-US');
+        currentDay.setDate(currentDay.getDate() + 1);
+        currentDay.toLocaleDateString('en-US');
+        if(props.contract.contract.deadLineDayType == "календарных дней"){
+            finalDateDeadLineDate.setDate(startDateDeadLineDate.getDate() + props.contract.contract.deadLine - 1);
+            
+            finalDateDeadLineDateFormated.setDate(finalDateDeadLineDate.getDate());
+            finalDateDeadLineDateFormated = finalDateDeadLineDateFormated.toJSON();
+            finalDateDeadLineDateFormated = finalDateDeadLineDateFormated.split('T')[0];
+            finalDateDeadLineDateFormated = finalDateDeadLineDateFormated.split('-').reverse().join('.');
+            setFinalDateFormat(finalDateDeadLineDateFormated);
+
+            finalDateDeadLineDate.toLocaleDateString('en-US');
+            var daysLeftCount = formulajs.DAYS(finalDateDeadLineDate, currentDay)
+        }
+        else{
+            var bankDaysWithRest = props.contract.contract.deadLine % 5;
+            var bankDaysNumber = props.contract.contract.deadLine / 5;
+            finalDateDeadLineDate.setDate(startDateDeadLineDate.getDate() - 1 + ((bankDaysNumber * 7) + (bankDaysWithRest)));
+            finalDateDeadLineDate.toLocaleDateString('en-US');
+
+            finalDateDeadLineDateFormated.setDate(finalDateDeadLineDate.getDate());
+            finalDateDeadLineDateFormated = finalDateDeadLineDateFormated.toJSON();
+            finalDateDeadLineDateFormated = finalDateDeadLineDateFormated.split('T')[0];
+            finalDateDeadLineDateFormated = finalDateDeadLineDateFormated.split('-').reverse().join('.');
+            setFinalDateFormat(finalDateDeadLineDateFormated);
+
+            var daysLeftCount = formulajs.DAYS(finalDateDeadLineDate, currentDay)
+        }
+        SetDescriptionColors(daysLeftCount)
+        
         let formattedDate = props.contract.contract.contractDate.split('T')[0];
         formattedDate = formattedDate.split('-').reverse().join('.');
         store.contracts.clients.find(element => { 
             if(element.id == props.contract.contract.clientId){
                 setClientName(element.fullName);
             }  
+        });
+        store.contracts.termsOfPayment.find(element => {
+            if(element.id == props.contract.contract.termsOfPaymentId){
+                setTermsOfPaymentName(element.name);
+            }  
         })
-        setDateFormat(formattedDate);
+        //setDateFormat(formattedDate);
         if(props.contract.payments.length != 0){
             let wholePayment = 0;
             props.contract.payments.forEach((payment) => {
@@ -53,6 +97,55 @@ function RowElement(props){
             setPaymentPercent("");
         }
     }, [store])
+
+    function SetDescriptionColors(daysLeftCount){
+        var element = document.getElementById('mainDiv' + props.contract.contract.id);
+        element.classList.remove("alarmColor");
+        element.classList.remove("shouldBeDoneSoon");
+        element.classList.remove("alarmAnimation");
+        if(store.currentTab != 3){
+            if(daysLeftCount == 0){
+                setDaysLeft("Отгрузка!")
+            }
+            if (daysLeftCount > 10){
+                setDaysLeft(daysLeftCount)
+                element.classList.remove("alarmColor");
+                element.classList.remove("shouldBeDoneSoon");
+                element.classList.remove("alarmAnimation");
+            }
+            if(daysLeftCount <= 10){
+                setDaysLeft(daysLeftCount)
+                element.classList.remove("alarmColor");
+                element.classList.add("shouldBeDoneSoon");
+                element.classList.remove("alarmAnimation");
+            } 
+            if(daysLeftCount <= 5){
+                setDaysLeft(daysLeftCount)
+                element.classList.add("alarmColor");
+                element.classList.remove("shouldBeDoneSoon");
+                element.classList.remove("alarmAnimation");
+            } 
+            if(daysLeftCount <= 0 && props.contract.contract.readyMark == false){
+                setDaysLeft(daysLeftCount);
+                element.classList.add("alarmAnimation");
+                element.classList.remove("shouldBeDoneSoon");
+                element.classList.remove("alarmColor");
+            } 
+        }
+        else{
+            setDaysLeft("Отдан")
+        }
+    }
+
+    function onNotesClick(id){
+        let readyDescription = document.getElementById("notesDescription" + props.contract.contract.id);
+        readyDescription.textContent = "Заметки для " + props.contract.contract.description;
+        let bar = document.getElementById('bar');
+        bar.classList.add('zindex');
+        mpopupReady = document.getElementById('mpopupNotes' + id);
+        mpopupReady.style.display = "block";
+    }
+
 
     function onReadyClick(id){
         let readyDescription = document.getElementById("readyDescription" + props.contract.contract.id);
@@ -154,6 +247,13 @@ function RowElement(props){
         bar.classList.remove('zindex');
     }
 
+    function closeNotesView(){
+        mpopupReady = document.getElementById('mpopupNotes' + currentContractId)
+        mpopupReady.style.display = "none"; 
+        let bar = document.getElementById('bar');
+        bar.classList.remove('zindex');
+    }
+
     window.onclick = function(event) {
         if (event.target == mPopupSpecification) {
             closeSpecification();
@@ -180,7 +280,7 @@ function RowElement(props){
         <div style={{padding: "0px"}}>
             <div className="col-lg-12 mainDiv" id={"mainDiv"+props.contract.contract.id}>
             <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1"
-                    style={{minWidth: "30px", maxWidth: "44px"}}
+                    style={{minWidth: "30px", maxWidth: "44px", position: "static"}}
                     onMouseLeave={() => dropdown.style.display = "none"} > 
                     <img  
                         className="click-style" 
@@ -205,17 +305,31 @@ function RowElement(props){
                             : 
                             <div className="dropDownMenuItem"
                                 onClick={() => onReadyClick(props.contract.contract.id)}>Отметка о готовности
-                            </div>
+                            </div> 
                         } 
+                        {
+                            store.currentTab == 0 ?
+                            <div>
+                            </div>
+                            : 
+                            <div className="dropDownMenuItem"
+                                onClick={() => onNotesClick(props.contract.contract.id)}>Заметки
+                            </div> 
+                        }
                     </div>
                 </div>
+                <div title={props.contract.contract.manufacturingLeadNotes} className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
+                    style={{borderRadius: "5px", minWidth: "80px", margin: "auto 0px", maxWidth: "220px", textAlign: "justify",
+                        backgroundColor: bgNotesColor}}>
+                    {props.contract.contract.manufacturingLeadNotes}
+                </div>
                 <div title={props.contract.contract.contractNumber} className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
-                    style={{minWidth: "80px", margin: "auto 0px", maxWidth: "110px"}}>
+                    style={{minWidth: "50px", margin: "auto 0px", maxWidth: "80px"}}>
                     {props.contract.contract.contractNumber}
                 </div>
-                <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
-                    style={{minWidth: "80px",margin: "auto 0px", margintop: "auto", maxWidth: "100px"}}>
-                    {date}
+                <div title={props.contract.contract.description} className="co2-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
+                    style={{minWidth: "100px", margin: "auto 0px", maxWidth: "250px"}}>
+                    {props.contract.contract.description}
                 </div>
                 <div title={clientName}
                     className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
@@ -227,38 +341,32 @@ function RowElement(props){
                         : <div></div> 
                     }
                 </div>
+                <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
+                    style={{margin: "auto 0px",maxWidth: "150px",minWidth: "140px"}}>
+                    { daysLeft != 0 ? daysLeft + " дней(я)" : "Отгрузка!"}
+                    { 
+                        daysLeft < 0 ? <img title="И так сойдет!" style={{height: "35px", width: "35px"}} src={alarm}></img> : <div></div>
+                    }
+                </div>
+                <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
+                    style={{margin: "auto 0px",minWidth: "70px", maxWidth: "100px"}}>
+                    {finalDate}
+                </div>
                 <div title={props.contract.contract.amount} className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
                     style={{minWidth: "80px", margin: "auto 0px", maxWidth: "100px"}}>
                     {props.contract.contract.amount}
                 </div>
-                <div title={props.contract.contract.description} className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
-                    style={{minWidth: "80px", margin: "auto 0px", maxWidth: "300px"}}>
-                    {props.contract.contract.description}
-                </div>
                 <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
-                    style={{minWidth: "80px",margin: "auto 0px", maxWidth: "100px"}}>
+                    style={{minWidth: "30px",margin: "auto 0px", maxWidth: "50px"}}>
                     {paymentPercent}
                 </div>
-                <div title={props.contract.contract.deadLine + " " + props.contract.contract.deadLineDayType} 
-                className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
-                    style={{minWidth: "100px",margin: "auto 0px", maxWidth: "180px"}}>
-                    {props.contract.contract.deadLine + " " + props.contract.contract.deadLineDayType} 
+                <div title={termsOfPaymentName} className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
+                    style={{minWidth: "80px",margin: "auto 0px", maxWidth: "200px"}}>
+                    {termsOfPaymentName}
                 </div>
-                <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1 statusImg" 
-                    src={props.contract.contract.signatureMark ? readyImage : notReadyImage} 
-                    title={props.contract.contract.signDate > defaultDate ? 
-                        "Дата подписи " + props.contract.contract.signDate.split('T')[0].split('-').reverse().join('.') : ""}
-                    style={{minWidth: "50px", maxWidth: "50px"}}></img>
-                <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1 statusImg"
-                    src={props.contract.contract.readyMark ? readyImage : notReadyImage} 
-                    style={{minWidth: "50px", maxWidth: "50px"}}></img>
-                <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1 statusImg"
+                <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1 statusImgWorkPlan"
                     src={props.contract.contract.ourDelivery ? ourDeliveryImage : notOurDeliveryImage} 
-                    style={{minWidth: "50px", marginRight: "50px", maxWidth: "50px"}}></img>
-                <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1 statusImg"
-                    src={props.contract.contract.sawContract ? ourDeliveryImage : notOurDeliveryImage} 
-                    style={{minWidth: "50px", marginRight: "50px", maxWidth: "50px"}}
-                    title={props.contract.contract.contractAcceptedBy }></img>
+                    style={{minWidth: "50px", maxWidth: "50px"}}></img>
                 {
                     documentSpecification.firstChild.textContent != "null" && documentSpecification.firstChild.textContent != "" ? 
                     (<div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
@@ -267,7 +375,6 @@ function RowElement(props){
                             <img className="click-style" id="specImg" 
                                 src={specificationImage}
                                 title="Спецификация"
-                                style={{ marginRight: "5px !important"}}
                                 >
                             </img>
                         </div>)
@@ -328,8 +435,20 @@ function RowElement(props){
                    
                 </div>
             </div>
+            <div id={"mpopupNotes" + props.contract.contract.id} class="mPopupSpecification">
+                <div className="modal-background-sign">
+                    <div className="specification-description">
+                        <div id={"notesDescription" + props.contract.contract.id}></div>
+                        <img className="close-img" src={close} width={"40px"} height={"40px"}
+                                onClick={() =>{ closeNotesView() }}></img>
+                    </div> 
+                        <ManufacturerNotes contractDescription={props.contract.contract}
+                            id={props.contract.contract.id}></ManufacturerNotes>
+                   
+                </div>
+            </div>
         </div>
     )
 }
 
-export default RowElement;
+export default WorkPlanRowElement;

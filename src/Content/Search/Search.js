@@ -1,11 +1,12 @@
-import '../Search/Search.css'
+import '..//Search//Search.css'
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import sortUp from '../../images/sortUpDown.png'
 import sortDown from '../../images/sortDownUp.png'
+import downloadFile from '../../images/downloadContract.png'
 import {React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { SEARCH_CTC, SORT_BY_DATE, SORT_CTC } from '../../Constants';
+import { SEARCH_CTC, SERVER_LINK, SORT_BY_DATE, SORT_CTC, TEMPLATE_LINK } from '../../Constants';
 
 function Search(){
 
@@ -23,10 +24,26 @@ function Search(){
     useEffect(() => {
         setSortDirection(false);   
         const currentYear = new Date().getFullYear();
-        setDateFrom(currentYear - 1 + "-01-01");
+        setDateFrom(currentYear + "-01-01");
         const date = new Date().toLocaleDateString();
         setDateTo(date.split('.').reverse().join('-'));
     },[]);
+
+    const doFetchDownload = () => {
+        fetch(SERVER_LINK + TEMPLATE_LINK)
+            .then(resp => resp.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.style.display = "none";
+                a.href = url;
+                a.download = "Шаблон для заполнения договора.dotm";
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(() => {});
+    };
 
     const sortClick = event => {
         if(event.target.src === sortUp)  {
@@ -163,6 +180,9 @@ function Search(){
         </div>
         <div class="sortBtn">
             <img style={{margin: "2px"}} onClick={sortClick} src={sortUp}></img>
+        </div>
+        <div class="downloadContract" title='Новый договор'>
+            <img style={{margin: "0px"}} onClick={doFetchDownload} src={downloadFile}></img>
         </div>
     </div>);
 }

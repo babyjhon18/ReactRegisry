@@ -13,12 +13,14 @@ import ActOfContract from '..//ActsOfContract//ActsOfContract';
 import ContractsPayments from '..//ContractPayments//ContractsPayments';
 import SignContract from "../SignContract/SignContract";
 import ReadyContract from "../ReadyContract/ReadyContract";
+import * as formulajs from '@formulajs/formulajs'
 
-function RowElement(props){  
+function UnpaidRowElement(props){  
 
     const [date, setDateFormat] = useState();
     const [clientName, setClientName] = useState();
     const [paymentPercent, setPaymentPercent] = useState();
+    const [paymentDelay, setPaymentDelay] = useState();
     const store = useSelector(state => state.contractReduser)
 
     var mPopupSpecification = document.getElementById('mpopupBox')
@@ -31,7 +33,12 @@ function RowElement(props){
     var attentionIcon;
     const defaultDate = "1900-01-01T00:00:00"
     const actToClose = "Акты";
-    const paymentToClose = "Оплаты"
+    const paymentToClose = "Оплаты";
+    const LastAct = props.contract.acts.slice(-1)[0];
+    var currentDay = new Date();
+    const startPaymentDay = new Date(LastAct != undefined ? LastAct.actDate : '')
+    const finalPaymentDay = new Date(LastAct != undefined ? LastAct.actDate : '')
+    
 
     useEffect(() =>{
         let formattedDate = props.contract.contract.contractDate.split('T')[0];
@@ -41,6 +48,29 @@ function RowElement(props){
                 setClientName(element.fullName);
             }  
         })
+
+
+        startPaymentDay.toLocaleDateString('en-US');
+        currentDay.setDate(currentDay.getDate() + 1);
+        currentDay.toLocaleDateString('en-US');
+        if(props.contract.contract.termsOfPaymentId == 3){
+            if(props.contract.contract.deadLineDayType == "календарных дней"){
+                    finalPaymentDay.setDate(startPaymentDay.getDate() + props.contract.contract.paymentDelay - 1);
+                    finalPaymentDay.toLocaleDateString('en-US');
+                    var daysLeftCount = formulajs.DAYS(finalPaymentDay, currentDay)
+                }
+                else{
+                    var bankDaysWithRest = props.contract.contract.paymentDelay % 5;
+                    var bankDaysNumber = props.contract.contract.paymentDelay / 5;
+                    finalPaymentDay.setDate(startPaymentDay.getDate() - 1 + ((bankDaysNumber * 7) + (bankDaysWithRest)));
+                    finalPaymentDay.toLocaleDateString('en-US');
+
+                    var daysLeftCount = formulajs.DAYS(finalPaymentDay, currentDay)
+                }
+                SetDescriptionColors(daysLeftCount)
+        }
+        
+
         setDateFormat(formattedDate);
         if(props.contract.payments.length != 0){
             let wholePayment = 0;
@@ -53,6 +83,46 @@ function RowElement(props){
             setPaymentPercent("");
         }
     }, [store])
+
+    
+    function SetDescriptionColors(daysLeftCount){
+        var element = document.getElementById('mainDiv' + props.contract.contract.id);
+        element.classList.remove("alarmColor");
+        element.classList.remove("shouldBeDoneSoon");
+        element.classList.remove("alarmAnimation");
+        if(store.currentTab != 3){
+            if(daysLeftCount == 0){
+                setPaymentDelay("Оплачен")
+            }
+            if (daysLeftCount > 10){
+                setPaymentDelay(daysLeftCount)
+                element.classList.remove("alarmColor");
+                element.classList.remove("shouldBeDoneSoon");
+                element.classList.remove("alarmAnimation");
+            }
+            if(daysLeftCount <= 10){
+                setPaymentDelay(daysLeftCount)
+                element.classList.remove("alarmColor");
+                element.classList.add("shouldBeDoneSoon");
+                element.classList.remove("alarmAnimation");
+            } 
+            if(daysLeftCount <= 5){
+                setPaymentDelay(daysLeftCount)
+                element.classList.add("alarmColor");
+                element.classList.remove("shouldBeDoneSoon");
+                element.classList.remove("alarmAnimation");
+            } 
+            if(daysLeftCount <= 0 && props.contract.contract.readyMark == false){
+                setPaymentDelay(daysLeftCount);
+                element.classList.add("alarmAnimation");
+                element.classList.remove("shouldBeDoneSoon");
+                element.classList.remove("alarmColor");
+            } 
+        }
+        else{
+            setPaymentDelay("Оплачен")
+        }
+    }
 
     function onReadyClick(id){
         let readyDescription = document.getElementById("readyDescription" + props.contract.contract.id);
@@ -210,7 +280,7 @@ function RowElement(props){
                     </div>
                 </div>
                 <div title={props.contract.contract.contractNumber} className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
-                    style={{minWidth: "80px", margin: "auto 0px", maxWidth: "110px"}}>
+                    style={{minWidth: "100px", margin: "auto 0px", maxWidth: "130px"}}>
                     {props.contract.contract.contractNumber}
                 </div>
                 <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
@@ -239,10 +309,14 @@ function RowElement(props){
                     style={{minWidth: "80px",margin: "auto 0px", maxWidth: "100px"}}>
                     {paymentPercent}
                 </div>
-                <div title={props.contract.contract.deadLine + " " + props.contract.contract.deadLineDayType} 
-                className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
-                    style={{minWidth: "100px",margin: "auto 0px", maxWidth: "180px"}}>
-                    {props.contract.contract.deadLine + " " + props.contract.contract.deadLineDayType} 
+                <div title={props.contract.contract.termsOfPaymentId == 3 ? 
+                    props.contract.contract.paymentDelay + " " + props.contract.contract.paymentDelayDayType : "Не указан"} 
+                    className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
+                    style={{minWidth: "120px",margin: "auto 0px", maxWidth: "210px"}}>
+                    {
+                        props.contract.contract.termsOfPaymentId == 3 ? 
+                        paymentDelay + " " + props.contract.contract.paymentDelayDayType : "Не указан" 
+                    }
                 </div>
                 <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1 statusImg" 
                     src={props.contract.contract.signatureMark ? readyImage : notReadyImage} 
@@ -255,25 +329,6 @@ function RowElement(props){
                 <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1 statusImg"
                     src={props.contract.contract.ourDelivery ? ourDeliveryImage : notOurDeliveryImage} 
                     style={{minWidth: "50px", marginRight: "50px", maxWidth: "50px"}}></img>
-                <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1 statusImg"
-                    src={props.contract.contract.sawContract ? ourDeliveryImage : notOurDeliveryImage} 
-                    style={{minWidth: "50px", marginRight: "50px", maxWidth: "50px"}}
-                    title={props.contract.contract.contractAcceptedBy }></img>
-                {
-                    documentSpecification.firstChild.textContent != "null" && documentSpecification.firstChild.textContent != "" ? 
-                    (<div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
-                        style={{padding: "5px", minWidth: "50px", maxWidth: "50px"}}
-                        onClick={() => specificationClicked()}>
-                            <img className="click-style" id="specImg" 
-                                src={specificationImage}
-                                title="Спецификация"
-                                style={{ marginRight: "5px !important"}}
-                                >
-                            </img>
-                        </div>)
-                    :
-                    (<div></div>)
-                }
             </div>
             <div id="mpopupBox" class="mPopupSpecification">
                 <div className="modal-background-specification">
@@ -332,4 +387,4 @@ function RowElement(props){
     )
 }
 
-export default RowElement;
+export default UnpaidRowElement;

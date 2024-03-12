@@ -10,7 +10,8 @@ function ActsOfContract(props){
     async function AddNewAct(id){
         let actDate = document.getElementById('actDate' + id).value;
         let actNum = document.getElementById('actNum' + id).value;
-        let data = {actNumber: actNum, actDate: actDate + "T00:00:00", fK_ContractId: props.id}
+        let actSum = document.getElementById('actSum' + id).value;
+        let data = {actNumber: actNum, actPayment: actSum, actDate: actDate + "T00:00:00", fK_ContractId: props.id}
         const dataNew = await fetch(SERVER_LINK + CREATE_GET_ACT, {
             method: 'POST',
             headers: {
@@ -49,6 +50,12 @@ function ActsOfContract(props){
                             className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3 textAlign"
                             style={{minWidth: "150px",margin: "auto 0px", maxWidth: "180px"}}>
                             Дата: <input id={"actDate"+ props.id} type='date' className='datetime-pickers-act' required></input>
+                        </div>
+                        <div
+                            className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3 textAlign" 
+                            style={{minWidth: "150px", margin: "auto 0px", maxWidth: "180px"}}>
+                            Сумма: <input id={"actSum" + props.id} type={"number"} placeholder={"сумма платежа"}
+                                className='NumberContractInput' required></input>
                         </div>
                         <div className='col' style={{margin: "auto 0px", minWidth: "80px", maxWidth: "100px"}}>
                             <button type="button" id="addButton" 

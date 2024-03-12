@@ -38,6 +38,7 @@ const contractState = {
     link: SERVER_LINK + CREATE_GET_CONTRACT,
     header: jsonHeaderRegistry,
     contracts: getContracts(SERVER_LINK + CREATE_GET_CONTRACT),
+    defaultContracts: contracts,
     searchedContracts: contracts,
     blackList: blackList,
     currentTab: 0,
@@ -73,6 +74,7 @@ export function contractReduser(state = contractState, action){
             state.contracts.contracts[indexOfContract].acts[updatedActIndex].id = action.payload.id; 
             state.contracts.contracts[indexOfContract].acts[updatedActIndex].actNumber = action.payload.actNumber;
             state.contracts.contracts[indexOfContract].acts[updatedActIndex].actDate = action.payload.actDate;
+            state.contracts.contracts[indexOfContract].acts[updatedActIndex].actPayment = action.payload.actPayment;
             state.contracts.contracts[indexOfContract].acts[updatedActIndex].fK_ContractId = action.payload.fK_ContractId;
             return{
                 ...state
@@ -94,12 +96,14 @@ export function contractReduser(state = contractState, action){
             return state;
         case UPDATE_CTC_VIEW:
             let sortedItemsCurrent = [];
-            const previousYear = new Date();
-            previousYear.setFullYear(previousYear.getFullYear()-1);
+            const yearBegginig = new Date();
+            yearBegginig.setMonth(0);
+            yearBegginig.setDate(1);
+            console.log(yearBegginig);
             const dateCurrent = new Date();
             action.payload.contracts.map((contract) => {
                 let date = new Date(contract.contract.contractDate); 
-                if(previousYear < date && date < dateCurrent){
+                if(yearBegginig < date && date < dateCurrent){
                     sortedItemsCurrent.push(contract);
                 }
             });
@@ -108,6 +112,7 @@ export function contractReduser(state = contractState, action){
                 header: action.rowHeader,
                 link: action.link,
                 contracts: action.payload,
+                defaultContracts: action.payload,
                 blackList: action.payload.blackListClients,
                 searchedContracts: sortedItemsCurrent,
                 currentTab: action.tab
@@ -237,30 +242,30 @@ export function contractReduser(state = contractState, action){
         case SEARCH_CTC:
             switch(action.index){ 
                 case 0:
-                    var searchedItems = state.searchedContracts.filter((element) => {
+                    var searchedItems = state.defaultContracts.contracts.filter((element) => {
                         let finalRes = element.contract.description.toLowerCase();
                         return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
                     });
                     break;
                 case 1: 
-                    var finalResult = state.searchedContracts.filter(client => {
+                    var finalResult = state.defaultContracts.contracts.filter(client => {
                         let finalRes = client.name.toLowerCase(); 
                         return finalRes.indexOf(action.keyword.toLowerCase()) !== -1;
                     });
-                    var searchedItems = state.searchedContracts.filter((element) => {
+                    var searchedItems = state.defaultContracts.contracts.filter((element) => {
                         return finalResult.some((f) => {
                             return f.id == element.contract.clientId;
                         });
                     });
                     break;
                 case 2:
-                    var searchedItems = state.searchedContracts.filter((element) => {
+                    var searchedItems = state.defaultContracts.contracts.filter((element) => {
                         let finalRes = element.contract.contractNumber.toLowerCase();
                         return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
                     });
                     break;
                 case 3:
-                    var searchedItems = state.contracts.contracts;
+                    var searchedItems = state.defaultContracts.contracts;
                     break;
             }
             console.log(searchedItems);

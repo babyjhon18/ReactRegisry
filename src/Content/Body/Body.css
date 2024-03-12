@@ -12,6 +12,11 @@
 #bar .pro-sidebar-inner .pro-sidebar-footer .pro-inner-item .pro-icon-wrapper{
   background-color: red;
 }
+
+#bar .pro-sidebar-inner .pro-sidebar-footer .pro-inner-item .pro-icon-wrapper .download{
+  color: blue;
+}
+
 #bar .pro-sidebar {
   width: 100%;
   min-width: 35%;
