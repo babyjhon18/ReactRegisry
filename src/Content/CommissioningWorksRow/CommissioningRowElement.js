@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import './WorkPlanRowElement.css';
+import './CommissioningRowElement.css';
 import attention from '..//..//images/attentionBlackList.png';
 import notOurDeliveryImage from '..//..//images/delivery.png';
 import ourDeliveryImage from '..//..//images/ourDelivery.png';
@@ -14,10 +14,9 @@ import SignContract from "../SignContract/SignContract";
 import ReadyContract from "../ReadyContract/ReadyContract";
 import ManufacturerNotes from "../ManufacturerNotes/ManufacturerNotes"
 import * as formulajs from '@formulajs/formulajs'
-import { contains } from "rsuite/esm/DOMHelper";
 
 //0 день - день отгрузки! Считать включая текущий день!
-function WorkPlanRowElement(props){  
+function CommissioningRowElement(props){  
 
     const [finalDate, setFinalDateFormat] = useState();
     const [clientName, setClientName] = useState(); 
@@ -72,13 +71,7 @@ function WorkPlanRowElement(props){
 
             var daysLeftCount = formulajs.DAYS(finalDateDeadLineDate, currentDay)
         }
-        if(!props.contract.contract.readyMark){
-            SetDescriptionColors(daysLeftCount);
-        }
-        else{
-            SetDescriptionColors("Отгружен!");
-        }
-        
+        SetDescriptionColors(daysLeftCount)
         
         let formattedDate = props.contract.contract.contractDate.split('T')[0];
         formattedDate = formattedDate.split('-').reverse().join('.');
@@ -110,61 +103,34 @@ function WorkPlanRowElement(props){
         element.classList.remove("alarmColor");
         element.classList.remove("shouldBeDoneSoon");
         element.classList.remove("alarmAnimation");
-        element.classList.remove("done");
         if(store.currentTab != 3){
-            currentDay.setDate(currentDay.getDate() - 1)
+            if(daysLeftCount == 0){
+                setDaysLeft("Отгрузка!")
+            }
             if (daysLeftCount > 10){
                 setDaysLeft(daysLeftCount)
                 element.classList.remove("alarmColor");
                 element.classList.remove("shouldBeDoneSoon");
                 element.classList.remove("alarmAnimation");
-                element.classList.remove("submitedToday");
-                element.classList.remove("done");
-            }
-            if(currentDay.toJSON().split('T')[0] == props.contract.contract.dayToPlan.split('T')[0]){
-                setDaysLeft(daysLeftCount);
-                element.classList.remove("alarmAnimation");
-                element.classList.remove("shouldBeDoneSoon");
-                element.classList.remove("alarmColor");
-                element.classList.add("submitedToday");
-                element.classList.remove("done");
-            }
-            if(daysLeftCount == 0){
-                setDaysLeft("Отгрузка!")
             }
             if(daysLeftCount <= 10){
                 setDaysLeft(daysLeftCount)
                 element.classList.remove("alarmColor");
                 element.classList.add("shouldBeDoneSoon");
                 element.classList.remove("alarmAnimation");
-                element.classList.remove("submitedToday");
-                element.classList.remove("done");
             } 
             if(daysLeftCount <= 5){
                 setDaysLeft(daysLeftCount)
                 element.classList.add("alarmColor");
                 element.classList.remove("shouldBeDoneSoon");
                 element.classList.remove("alarmAnimation");
-                element.classList.remove("submitedToday");
-                element.classList.remove("done");
             } 
             if(daysLeftCount <= 0 && props.contract.contract.readyMark == false){
                 setDaysLeft(daysLeftCount);
                 element.classList.add("alarmAnimation");
                 element.classList.remove("shouldBeDoneSoon");
                 element.classList.remove("alarmColor");
-                element.classList.remove("submitedToday");
-                element.classList.remove("done");
             } 
-            //done
-            if(props.contract.contract.readyMark){
-                setDaysLeft(daysLeftCount)
-                element.classList.add("done");
-                element.classList.remove("alarmColor");
-                element.classList.remove("shouldBeDoneSoon");
-                element.classList.remove("alarmAnimation");
-                element.classList.remove("submitedToday");
-            }
         }
         else{
             setDaysLeft("Отдан")
@@ -352,8 +318,8 @@ function WorkPlanRowElement(props){
                         }
                     </div>
                 </div>
-                <div title={props.contract.contract.manufacturingLeadNotes} className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
-                    style={{borderRadius: "5px", minWidth: "80px", margin: "auto 0px", maxWidth: "220px", textAlign: "justify",
+                <div title={props.contract.contract.manufacturingLeadNotes} className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3" 
+                    style={{borderRadius: "5px", minWidth: "120px", margin: "auto 0px", maxWidth: "260px", textAlign: "justify",
                         backgroundColor: bgNotesColor}}>
                     {props.contract.contract.manufacturingLeadNotes}
                 </div>
@@ -398,9 +364,6 @@ function WorkPlanRowElement(props){
                     style={{minWidth: "80px",margin: "auto 0px", maxWidth: "200px"}}>
                     {termsOfPaymentName}
                 </div>
-                <img className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1 statusImgWorkPlan"
-                    src={props.contract.contract.ourDelivery ? ourDeliveryImage : notOurDeliveryImage} 
-                    style={{minWidth: "50px", maxWidth: "50px"}}></img>
                 {
                     documentSpecification.firstChild.textContent != "null" && documentSpecification.firstChild.textContent != "" ? 
                     (<div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
@@ -485,4 +448,4 @@ function WorkPlanRowElement(props){
     )
 }
 
-export default WorkPlanRowElement;
+export default CommissioningRowElement;

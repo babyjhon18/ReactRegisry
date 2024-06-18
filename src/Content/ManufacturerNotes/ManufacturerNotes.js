@@ -40,7 +40,7 @@ function SignContract(props){
                 <div style={{margin: "0px 0px", display: 'flex', alignItems: 'center'}}>
                     Цвет:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input id={"noteColor"+props.contractDescription.id} style={{padding: "0px"}}
-                    type='color' defaultValue={props.contractDescription.manufacturingLeadNoteColor}></input>
+                    type='color' defaultValue={props.contractDescription.manufacturingLeadNoteColor == null ? "#dfd754" : props.contractDescription.manufacturingLeadNoteColor }></input>
                 </div>
                 <div className="row" style={{margin: "5px 0px"}}>
                     Заметка:&nbsp;<textarea id={"manufacturerNotes"+props.contractDescription.id} 

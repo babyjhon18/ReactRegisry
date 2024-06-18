@@ -97,14 +97,47 @@ export function contractReduser(state = contractState, action){
         case UPDATE_CTC_VIEW:
             let sortedItemsCurrent = [];
             const yearBegginig = new Date();
-            yearBegginig.setMonth(0);
-            yearBegginig.setDate(1);
-            console.log(yearBegginig);
             const dateCurrent = new Date();
+            if(action.dateFrom != ""){
+                let dateFrom = action.dateFrom.split('-')
+                yearBegginig.setFullYear(dateFrom[0], dateFrom[1] - 1, dateFrom[2]);
+            }
+            else{
+                yearBegginig.setMonth(0);
+                yearBegginig.setDate(1);
+            }
+            if(action.dateTo != ""){
+                let dateTo = action.dateTo.split('-')
+                dateCurrent.setFullYear(dateTo[0], dateTo[1] - 1, dateTo[2]);
+            }
             action.payload.contracts.map((contract) => {
                 let date = new Date(contract.contract.contractDate); 
+                let finalDateDeadLineDate = new Date(contract.contract.signDate);
+                let startDateDeadLineDate = new Date(contract.contract.signDate);
                 if(yearBegginig < date && date < dateCurrent){
+                    if(contract.contract.deadLineDayType == "календарных дней"){
+                        finalDateDeadLineDate.setDate(startDateDeadLineDate.getDate() + contract.contract.deadLine - 1);
+                        finalDateDeadLineDate.toLocaleDateString('en-US');
+                    }
+                    else{
+                        let bankDaysWithRest = contract.contract.deadLine % 5;
+                        let bankDaysNumber = contract.contract.deadLine / 5;
+                        finalDateDeadLineDate.setDate(startDateDeadLineDate.getDate() + ((bankDaysNumber * 7) + (bankDaysWithRest)) - 1);
+                        finalDateDeadLineDate.toLocaleDateString('en-US');
+                    }
+                    contract.deadLineDaysCounted = finalDateDeadLineDate; 
                     sortedItemsCurrent.push(contract);
+                }
+                if(action.tab == 1){
+                    sortedItemsCurrent = sortedItemsCurrent.sort(function (a, b) {
+                        if (a.deadLineDaysCounted < b.deadLineDaysCounted) {
+                            return action.sortDirection ? 1 : -1;
+                        }
+                        if (a.deadLineDaysCounted > b.deadLineDaysCounted) {
+                            return action.sortDirection ? -1 : 1;
+                        }
+                        return 0;
+                    });
                 }
             });
             return {
@@ -146,9 +179,8 @@ export function contractReduser(state = contractState, action){
                 ...state
             }
         case DELETE_CTC:
-            return state;
+            return{...state}
         case DELETE_CLIENT_FROM_BLACK_LIST:
-            console.log(action.payload)
             var editedBlackList = state.blackList
                 .filter((client) =>  {
                 return client.id !== action.payload
@@ -170,26 +202,6 @@ export function contractReduser(state = contractState, action){
                 case 0: 
                     sortedItems = state.searchedContracts.sort(function(a, b){
                         if(action.sortDirection){
-                            return (a.contract.readyMark === b.contract.readyMark) ? 0 : a.contract.readyMark ? 1 : -1;
-                        }
-                        else{
-                            return (a.contract.readyMark === b.contract.readyMark) ? 0 : a.contract.readyMark ? -1 : 1
-                        }
-                    });
-                    break;
-                case 1: 
-                    sortedItems = state.searchedContracts.sort(function(a, b){
-                        if(action.sortDirection){
-                            return (a.contract.signatureMark === b.contract.signatureMark) ? 0 : a.contract.signatureMark ? 1 : -1;
-                        }
-                        else{
-                            return (a.contract.signatureMark === b.contract.signatureMark) ? 0 : a.contract.signatureMark ? -1 : 1
-                        }
-                    });
-                    break;
-                case 2: 
-                    sortedItems = state.searchedContracts.sort(function(a, b){
-                        if(action.sortDirection){
                             return (a.contract.ourDelivery === b.contract.ourDelivery) ? 0 : a.contract.ourDelivery ? 1 : -1;
                         }
                         else{
@@ -197,7 +209,7 @@ export function contractReduser(state = contractState, action){
                         }
                     });
                     break;
-                case 3: 
+                case 1: 
                     sortedItems = state.searchedContracts.sort(function(a, b){
                         if(a.contract.contractDate > b.contract.contractDate){
                             return action.sortDirection ? 1 : -1;
@@ -208,12 +220,36 @@ export function contractReduser(state = contractState, action){
                         return 0;
                     });
                     break;
-                case 4:
+                case 2:
                     sortedItems = state.searchedContracts.sort(function (a, b) {
-                        if (a.contract.description < b.contract.description) {
+                        var intA = parseInt(a.contract.contractNumber.split('/')[0]);
+                        var intB = parseInt(b.contract.contractNumber.split('/')[0]);
+                        if (intA < intB) {
                             return action.sortDirection ? 1 : -1;
                         }
-                        if (a.contract.description > b.contract.description) {
+                        if (intA > intB) {
+                            return action.sortDirection ? -1 : 1;
+                        }
+                        return 0;
+                    });
+                    break;
+                case 3:
+                    sortedItems = state.searchedContracts.sort(function (a, b) {
+                        if (a.deadLineDaysCounted < b.deadLineDaysCounted) {
+                            return action.sortDirection ? 1 : -1;
+                        }
+                        if (a.deadLineDaysCounted > b.deadLineDaysCounted) {
+                            return action.sortDirection ? -1 : 1;
+                        }
+                        return 0;
+                    });
+                    break;
+                case 4:
+                    sortedItems = state.searchedContracts.sort(function(a, b){
+                        if(a.contract.dayToPlan > b.contract.dayToPlan){
+                            return action.sortDirection ? 1 : -1;
+                        }
+                        if(a.contract.dayToPlan < b.contract.dayToPlan){
                             return action.sortDirection ? -1 : 1;
                         }
                         return 0;
@@ -228,7 +264,6 @@ export function contractReduser(state = contractState, action){
             var sortedItems = [];
             let dateFrom = new Date(action.dateFrom);
             let dateTo = new Date(action.dateTo);
-            console.log(dateTo);
             state.contracts.contracts.map((contract) => {
                 let date = new Date(contract.contract.contractDate); 
                 if(dateFrom < date && date < dateTo){
@@ -243,13 +278,13 @@ export function contractReduser(state = contractState, action){
             switch(action.index){ 
                 case 0:
                     var searchedItems = state.defaultContracts.contracts.filter((element) => {
-                        let finalRes = element.contract.description.toLowerCase();
+                        let finalRes = element.contract.contractNumber.toLowerCase();
                         return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
                     });
                     break;
                 case 1: 
-                    var finalResult = state.defaultContracts.contracts.filter(client => {
-                        let finalRes = client.name.toLowerCase(); 
+                    var finalResult = state.defaultContracts.clients.filter((client) => {
+                        let finalRes = client.fullName.toLowerCase(); 
                         return finalRes.indexOf(action.keyword.toLowerCase()) !== -1;
                     });
                     var searchedItems = state.defaultContracts.contracts.filter((element) => {
@@ -259,12 +294,6 @@ export function contractReduser(state = contractState, action){
                     });
                     break;
                 case 2:
-                    var searchedItems = state.defaultContracts.contracts.filter((element) => {
-                        let finalRes = element.contract.contractNumber.toLowerCase();
-                        return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
-                    });
-                    break;
-                case 3:
                     var searchedItems = state.defaultContracts.contracts;
                     break;
             }

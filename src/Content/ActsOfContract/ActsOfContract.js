@@ -42,9 +42,9 @@ function ActsOfContract(props){
                     style={{margin: "auto"}}>
                         <div
                             className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3 textAlign" 
-                            style={{minWidth: "150px", margin: "auto 0px", maxWidth: "160px"}}>
-                            Номер акта: <input id={"actNum" + props.id} type={"text"} 
-                                placeholder={"номер акта"} className='NumberContractInput' required></input>
+                            style={{minWidth: "150px", margin: "auto 0px", maxWidth: "200px"}}>
+                            Номер накладной: <input id={"actNum" + props.id} type={"text"} style={{minWidth: "160px"}}
+                                placeholder={"номер накладной"} className='NumberContractInput' required></input>
                         </div>
                         <div 
                             className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3 textAlign"
@@ -54,7 +54,7 @@ function ActsOfContract(props){
                         <div
                             className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3 textAlign" 
                             style={{minWidth: "150px", margin: "auto 0px", maxWidth: "180px"}}>
-                            Сумма: <input id={"actSum" + props.id} type={"number"} placeholder={"сумма платежа"}
+                            Сумма: <input id={"actSum" + props.id} type={"number"} placeholder={"сумма"}
                                 className='NumberContractInput' required></input>
                         </div>
                         <div className='col' style={{margin: "auto 0px", minWidth: "80px", maxWidth: "100px"}}>

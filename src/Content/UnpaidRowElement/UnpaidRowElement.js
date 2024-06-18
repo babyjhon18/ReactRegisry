@@ -53,11 +53,12 @@ function UnpaidRowElement(props){
         startPaymentDay.toLocaleDateString('en-US');
         currentDay.setDate(currentDay.getDate() + 1);
         currentDay.toLocaleDateString('en-US');
-        if(props.contract.contract.termsOfPaymentId == 3){
-            if(props.contract.contract.deadLineDayType == "календарных дней"){
-                    finalPaymentDay.setDate(startPaymentDay.getDate() + props.contract.contract.paymentDelay - 1);
-                    finalPaymentDay.toLocaleDateString('en-US');
-                    var daysLeftCount = formulajs.DAYS(finalPaymentDay, currentDay)
+        if(props.contract.contract.paymentDelay > 0){
+            if(props.contract.contract.termsOfPaymentId == 3){
+                if(props.contract.contract.deadLineDayType == "календарных дней"){
+                        finalPaymentDay.setDate(startPaymentDay.getDate() + props.contract.contract.paymentDelay - 1);
+                        finalPaymentDay.toLocaleDateString('en-US');
+                        var daysLeftCount = formulajs.DAYS(finalPaymentDay, currentDay)
                 }
                 else{
                     var bankDaysWithRest = props.contract.contract.paymentDelay % 5;
@@ -68,8 +69,11 @@ function UnpaidRowElement(props){
                     var daysLeftCount = formulajs.DAYS(finalPaymentDay, currentDay)
                 }
                 SetDescriptionColors(daysLeftCount)
+            }
+            else{
+                setPaymentDelay(-1);
+            }
         }
-        
 
         setDateFormat(formattedDate);
         if(props.contract.payments.length != 0){
@@ -312,9 +316,9 @@ function UnpaidRowElement(props){
                 <div title={props.contract.contract.termsOfPaymentId == 3 ? 
                     props.contract.contract.paymentDelay + " " + props.contract.contract.paymentDelayDayType : "Не указан"} 
                     className="col-md-2 col-sm-2 col-lg-2 col-xs-2 col-xl-2" 
-                    style={{minWidth: "120px",margin: "auto 0px", maxWidth: "210px"}}>
+                    style={{minWidth: "120px",margin: "auto 0px", maxWidth: "180px"}}>
                     {
-                        props.contract.contract.termsOfPaymentId == 3 ? 
+                        props.contract.contract.termsOfPaymentId == 3 && props.contract.contract.paymentDelayDayType != "" && paymentDelay != undefined ? 
                         paymentDelay + " " + props.contract.contract.paymentDelayDayType : "Не указан" 
                     }
                 </div>

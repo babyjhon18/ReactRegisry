@@ -24,9 +24,9 @@ function Payment(props){
     }
 
     async function editContract(props){
-        let paymentDate = document.getElementById('paymentDate' + props.payment.id).value;
-        let paymentNum = document.getElementById('paymentNum' + props.payment.id).value;
-        let paymnetSum = document.getElementById('paymentSum' + props.payment.id).value;
+        let paymentDate = document.getElementById('paymentEditDate' + props.payment.id).value;
+        let paymentNum = document.getElementById('paymentEditNum' + props.payment.id).value;
+        let paymnetSum = document.getElementById('paymentEditSum' + props.payment.id).value;
         let dataToSend = {id: props.payment.id, paymentDate: paymentDate + "T00:00:00", paymentNumber: paymentNum,
              paymentSum: paymnetSum, fK_ContractId: props.payment.fK_ContractId}
         var data = await fetch(SERVER_LINK + DELETE_UPDATE_PAYMENTS + props.payment.id, {
@@ -82,17 +82,17 @@ function Payment(props){
             <div id={"paymentToEdit" + props.payment.id} style={{display: "none"}} className="col-md-8 col-sm-8 col-lg-8 col-xs-8 col-xl-8 row ">
                 <div className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign" 
                     style={{minWidth: "150px", margin: "auto 2px", maxWidth: "140px"}}>
-                    Номер платежа: <input id={'paymentNum' + props.payment.id} placeholder={"номер платежа"} defaultValue={props.payment.paymentNumber} className='NumberContractInput' required></input>
+                    Номер платежа: <input id={'paymentEditNum' + props.payment.id} placeholder={"номер платежа"} defaultValue={props.payment.paymentNumber} className='NumberContractInput' required></input>
                 </div>
                 <div 
                     className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign"
                     style={{minWidth: "130px",margin: "auto 2px", maxWidth: "150px"}}>
-                    Дата: <input id={'paymentDate' + props.payment.id} onChange={handleInputChange} value={dateTime} className='NumberContractInput' type='date' required></input> 
+                    Дата: <input id={'paymentEditDate' + props.payment.id} onChange={handleInputChange} value={dateTime} className='NumberContractInput' type='date' required></input> 
                 </div>
                 <div 
                     className="col textAlign"
                     style={{minWidth: "120px",margin: "auto 2px", maxWidth: "140px"}}>
-                    Сумма: <input id={'paymentSum' + props.payment.id} placeholder={"сумма платежа"} defaultValue={props.payment.paymentSum} className='NumberContractInput' required></input>
+                    Сумма: <input id={'paymentEditSum' + props.payment.id} placeholder={"сумма платежа"} defaultValue={props.payment.paymentSum} className='NumberContractInput' required></input>
                 </div>
                 <div className='col' style={{margin: "auto 0px", minWidth: "120px", maxWidth: "160px"}}>
                     <button type="button" id="addButton" 

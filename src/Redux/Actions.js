@@ -24,13 +24,15 @@ export function ViewContracts(contractList, link, header){
     }
 }
 
-export function UpdateViewContracts(contractList, link, header, tab){
+export function UpdateViewContracts(contractList, link, header, tab, dateFrom, dateTo){
     return {
         type: UPDATE_CTC_VIEW,
         payload: contractList,
         link: link, 
         rowHeader: header,
-        currentTab: tab
+        currentTab: tab,
+        dateFrom: dateFrom,
+        dateTo: dateTo
     }
 }
 

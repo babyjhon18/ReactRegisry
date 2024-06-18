@@ -26,9 +26,9 @@ function Act(props){
     }
 
     async function editContract(props){
-        let actDate = document.getElementById('actDate' + props.act.id).value;
-        let actNum = document.getElementById('actNum' + props.act.id).value;
-        let actSum = document.getElementById('actSum' + props.act.id).value;
+        let actDate = document.getElementById('actEditDate' + props.act.id).value;
+        let actNum = document.getElementById('actEditNum' + props.act.id).value;
+        let actSum = document.getElementById('actEditSum' + props.act.id).value;
         let dataToSend = {id: props.act.id, actNumber: actNum, actPayment: actSum, actDate: actDate + "T00:00:00", fK_ContractId: props.act.fK_ContractId}
         console.log(dataToSend);
         var data = await fetch(SERVER_LINK + DELETE_UPDATE_ACT + props.act.id, {
@@ -63,12 +63,12 @@ function Act(props){
             <div id={"actData"+props.act.id} className="col-md-8 col-sm-8 col-lg-8 col-xs-8 col-xl-8 row">
                 <div
                     className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3 textAlign" 
-                    style={{minWidth: "190px", margin: "auto 0px", maxWidth: "150px"}}>
-                    Номер акта: {props.act.actNumber}
+                    style={{minWidth: "195px", margin: "auto 0px", maxWidth: "200px"}}>
+                    Номер накладной: {props.act.actNumber}
                 </div>
                 <div 
                     className="col-md-3 col-sm-3 col-lg-3 col-xs-3 col-xl-3 textAlign"
-                    style={{minWidth: "150px",margin: "auto 0px", maxWidth: "150px"}}>
+                    style={{minWidth: "160px",margin: "auto 0px", maxWidth: "180px"}}>
                     Дата: {date}
                 </div>
                 <div 
@@ -79,22 +79,23 @@ function Act(props){
             </div>
             <div id={"actToEdit"+props.act.id} style={{display: "none"}} className="col-md-8 col-sm-8 col-lg-8 col-xs-8 col-xl-8 row ">
                 <div className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign" 
-                    style={{minWidth: "150px", margin: "auto 2px", maxWidth: "140px"}}>
-                    Номер акта: <input id={"actNum" + props.act.id} placeholder={"номер акта"} defaultValue={props.act.actNumber} className="NumberContractInput" required></input>
+                    style={{minWidth: "185px", margin: "auto 2px", maxWidth: "220px"}}>
+                    Номер накладной: <input style={{minWidth: "160px"}} id={"actEditNum" + props.act.id} placeholder={"номер накладной"} defaultValue={props.act.actNumber} className="NumberContractInput" required></input>
                 </div>
                 <div 
                     className="col-md-4 col-sm-4 col-lg-4 col-xs-4 col-xl-4 textAlign"
-                    style={{minWidth: "130px",margin: "auto 2px", maxWidth: "150px"}}>
-                    Дата: <input type='date' id={"actDate" + props.act.id} onChange={handleInputChange} value={dateTime} className='datetime-pickers-act' required></input> 
+                    style={{minWidth: "160px",margin: "auto 2px", maxWidth: "180px"}}>
+                    Дата: <input type='date' id={"actEditDate" + props.act.id} onChange={handleInputChange} value={dateTime} className='datetime-pickers-act' required></input> 
                 </div>
                 <div 
                     className="col textAlign"
                     style={{minWidth: "120px",margin: "auto 2px", maxWidth: "140px"}}>
-                    Сумма: <input id={'actSum' + props.act.id} placeholder={"сумма платежа"} defaultValue={props.act.actPayment} className='NumberContractInput' required></input>
+                    Сумма: <input id={'actEditSum' + props.act.id} placeholder={"сумма"} defaultValue={props.act.actPayment} className='NumberContractInput' required></input>
                 </div>
-                <div className='col' style={{margin: "auto 0px", minWidth: "120px", maxWidth: "160px"}}>
+                <div className='col' style={{margin: "auto 0px", width: "20px"}}>
                     <button type="button" id="addButton" 
                         className="btn col" 
+                        style={{marginLeft: "55px"}}
                         onClick={() => editContract(props)}>Изменить</button> 
                 </div>
             </div>

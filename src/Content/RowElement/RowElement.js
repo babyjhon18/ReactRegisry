@@ -13,6 +13,7 @@ import ActOfContract from '..//ActsOfContract//ActsOfContract';
 import ContractsPayments from '..//ContractPayments//ContractsPayments';
 import SignContract from "../SignContract/SignContract";
 import ReadyContract from "../ReadyContract/ReadyContract";
+import DeleteContract from "../DeleteContract/DeleteContract"
 
 function RowElement(props){  
 
@@ -27,6 +28,7 @@ function RowElement(props){
     var mPopupPayments = "";
     var mpopupSign = "";
     var mpopupReady = "";
+    var mpopupDelete = "";
     var dropdown = "";
     var attentionIcon;
     const defaultDate = "1900-01-01T00:00:00"
@@ -105,7 +107,7 @@ function RowElement(props){
     function onActClicked(id){
         currentContractId = id;
         let actDescription = document.getElementById("actDescription" + id);
-        actDescription.textContent = "Акты оплат по договору " + props.contract.contract.description;
+        actDescription.textContent = "Накладные по договору " + props.contract.contract.description;
         let bar = document.getElementById('bar');
         bar.classList.add('zindex');
         mPopupActs = document.getElementById('mpopupActs' + id);
@@ -120,6 +122,16 @@ function RowElement(props){
         bar.classList.add('zindex');
         mPopupPayments = document.getElementById('mpopupPayment' + id);
         mPopupPayments.style.display = "block";
+    }
+
+    function onDeleteClicked(id){
+        currentContractId = id;
+        let deleteDescription = document.getElementById("deleteDescription" + id);
+        deleteDescription.textContent = "Удаление " + props.contract.contract.description;
+        let bar = document.getElementById('bar');
+        bar.classList.add('zindex');
+        mpopupDelete = document.getElementById('mpopupDelete' + id);
+        mpopupDelete.style.display = "block";
     }
 
     function closeSpecEvent(){
@@ -150,6 +162,13 @@ function RowElement(props){
     function closeReadyView(){
         mpopupReady = document.getElementById('mpopupReady' + currentContractId)
         mpopupReady.style.display = "none"; 
+        let bar = document.getElementById('bar');
+        bar.classList.remove('zindex');
+    }
+
+    function closeDeleteView(){
+        mpopupDelete = document.getElementById('mpopupDelete' + currentContractId)
+        mpopupDelete.style.display = "none"; 
         let bar = document.getElementById('bar');
         bar.classList.remove('zindex');
     }
@@ -190,7 +209,7 @@ function RowElement(props){
                         ></img>
                     <div id={"dropDownMenu" + props.contract.contract.id} className="dropDownMenu">
                         <div className="dropDownMenuItem"
-                            onClick={() => onActClicked(props.contract.contract.id)}>Акты
+                            onClick={() => onActClicked(props.contract.contract.id)}>Накладные/Акты
                         </div>
                         <div className="dropDownMenuItem"
                             onClick={() => onPaymentClicked(props.contract.contract.id)}>Платежи
@@ -207,6 +226,9 @@ function RowElement(props){
                                 onClick={() => onReadyClick(props.contract.contract.id)}>Отметка о готовности
                             </div>
                         } 
+                        <div className="dropDownMenuItem"
+                            onClick={() => onDeleteClicked(props.contract.contract.id)}>Удалить
+                        </div>
                     </div>
                 </div>
                 <div title={props.contract.contract.contractNumber} className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
@@ -325,6 +347,19 @@ function RowElement(props){
                     </div> 
                         <ReadyContract contractDescription={props.contract.contract}
                             id={props.contract.contract.id}></ReadyContract>
+                   
+                </div>
+            </div>
+            <div id={"mpopupDelete" + props.contract.contract.id} class="mPopupSpecification">
+                <div className="modal-background-sign">
+                    <div className="specification-description">
+                        <div id={"deleteDescription" + props.contract.contract.id}></div>
+                        <img className="close-img" src={close} width={"40px"} height={"40px"}
+                                onClick={() =>{ closeDeleteView() }}></img>
+                    </div> 
+                        <DeleteContract messageText={"Вы уверены, что хотите удалить " + 
+                            props.contract.contract.description + "(номер договора " + props.contract.contract.contractNumber + ")?"}
+                            id={props.contract.contract.id}></DeleteContract>
                    
                 </div>
             </div>

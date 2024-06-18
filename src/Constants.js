@@ -103,4 +103,26 @@ export const jsonHeaderRegistry = {
     comment:null,
     htmlSpecification:null
   }
+
+  export const jsonHeaderCommissionWorks = {
+    id:1,
+    notes:"Заметки",
+    description:"Наименование договора",
+    deviceType: "Оборудование",
+    client:"Заказчик",
+    contractNumber:"№",
+    contractDate:"Дата",
+    deadLineDate: "Срок",
+    clientId:1,
+    amount:"Сумма",
+    percent:"%",
+    termsOfPaymentId:"Условия оплаты",
+    signatureMark:"Подпись",
+    readyMark:"Готовность",
+    deadlineCondition:"До",
+    deadLineSetted: "Срок поставки",
+    ourDelivery:"Доставка",
+    comment:null,
+    htmlSpecification:null
+  }
   

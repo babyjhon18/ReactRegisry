@@ -14,18 +14,15 @@ function ReadyContract(props){
     const [readyState, setReadyState] = useState();
     const [readyNotes, setReadyNotes] = useState(); 
     var mPopupNot = "";
-    var mpopupNotification = "";
     var _contract = props.contractDescription;
 
     useEffect(()=> {
-        if(messages.isAccepted && messages.isReady){
-            saveCommentAndStatusOfContract(_contract);
-            closeMessageView(_contract.id);
+        if(messages.isAccepted){
+            saveCommentAndStatusOfContract(messages.contract, messages.sendNotification);
         }
-        
     },[messages])
 
-    async function sendNotification(contract){
+    async function Notification(contract){
         var dataToSend = {
             "clientId": contract.clientId,
             "contractId": contract.id,
@@ -38,14 +35,18 @@ function ReadyContract(props){
             },
             body: JSON.stringify(dataToSend),
             }).then((response) => {
+                closeMessageView(contract.id); 
                 console.log(response);
-                dispatch({type: SET_MESSAGE_STATE, payload: {accepted: false, ready: true}});
         });
     }
 
-    async function saveCommentAndStatusOfContract(contract){
+    async function saveCommentAndStatusOfContract(contract, sendNotification){
         contract.notes = readyNotes;
-        contract.readyMark = readyState;
+        if(contract.readyMark){
+            contract.readyMark = true;
+        }else{
+            contract.readyMark = readyState;
+        }
         let dataToSend = contract;
         let clientIndex = clients.contracts.clients.findIndex((client) => client.id == contract.clientId);
         let clientName = clients.contracts.clients[clientIndex].fullName;
@@ -53,21 +54,29 @@ function ReadyContract(props){
         let termsOfPaymentName = clients.contracts.termsOfPayment[termIndex].name;
         dataToSend.clientName = clientName;
         dataToSend.termsOfPaymentName = termsOfPaymentName;
-        var data = await fetch(SERVER_LINK + DELETE_UPDATE_CONTRACT + contract.id, {
+        dispatch({type: SET_MESSAGE_STATE, payload: {accepted: false, ready: true, sendNotification: sendNotification, contract: contract}});
+        console.log(dataToSend);
+        await fetch(SERVER_LINK + DELETE_UPDATE_CONTRACT + contract.id, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(dataToSend),
-            }).then((response) => {
-                return response.json();
+            }).then(async (response) => {
+                if(response.json() != null){
+                    dispatch({type: EDIT_CTC, payload: contract})
+                    if(messages.contract.readyMark){
+                        if(messages.sendNotification){
+                            console.log(messages.sendNotification)
+                            await Notification(contract)
+                            closeMessageView(contract.id); 
+                        }
+                        else{
+                            closeMessageView(contract.id); 
+                        }
+                    }   
+            }
         });
-        if(data != null){
-            dispatch({type: EDIT_CTC, payload: contract})
-            if(messages.isReady){
-                sendNotification(contract)
-            }   
-        }
     }
 
     function onReadyClicked(contract){
@@ -80,15 +89,16 @@ function ReadyContract(props){
             bar.classList.add('zindex');
             mPopupNot = document.getElementById('mpopupMessage' + contract.id);
             mPopupNot.style.display = "block";
+            dispatch({type: SET_MESSAGE_STATE, payload: {accepted: false, ready: false, sendNotification: false, contract: contract}});
         }   
         else{
+            contract.readyMark = false;
             saveCommentAndStatusOfContract(contract);
         }
     }
 
     function closeMessageView(id){
-        mpopupNotification = document.getElementById('mpopupMessage' + id)
-        mpopupNotification.style.display = "none"; 
+        document.getElementById('mpopupMessage' + id).style.display = "none";
     }
 
     const onChangeCheckHandler = (e) =>{
@@ -111,11 +121,11 @@ function ReadyContract(props){
                 {
                     props.contractDescription.readyMark == true ? 
                     <div className="row" style={{margin: "5px 0px"}}>
-                        Готов к выдаче: &nbsp;<input id={"ready"+props.contractDescription.id} 
+                        Готов: &nbsp;<input id={"ready"+props.contractDescription.id} 
                         className='checkInput' type={"checkbox"} defaultChecked onChange={onChangeCheckHandler}></input>
                     </div> :
                     <div className="row" style={{margin: "5px 0px"}}>
-                        Готов к выдаче: &nbsp;<input id={"ready"+props.contractDescription.id} 
+                        Готов: &nbsp;<input id={"ready"+props.contractDescription.id} 
                         className='checkInput' type={"checkbox"} onChange={onChangeCheckHandler}></input>
                     </div>
                 }
@@ -133,12 +143,13 @@ function ReadyContract(props){
              <div id={"mpopupMessage" + props.contractDescription.id} class="mPopupSpecification">
                 <div className="modal-background-sign">
                     <div className="specification-description">
-                        <div id={"messageDescription" + props.contractDescription.id}></div>
+                        <div id={"messageDescription" + _contract.id}></div>
                         <img className="close-img" src={close} width={"40px"} height={"40px"}
                                 onClick={() =>{ closeMessageView(props.contractDescription.id) }}></img>
                     </div> 
                         <MessageComponent messageText={"Заказчику будет отправлено электронное письмо о готовности оборудования. Уверены, что хотите продолжить?"}
-                            id={props.contractDescription.id}></MessageComponent>
+                            id={props.contractDescription.id}
+                            contract={props.contractDescription}></MessageComponent>
                    
                 </div>
             </div>
