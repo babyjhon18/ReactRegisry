@@ -29,6 +29,7 @@ function Act(props){
         let actDate = document.getElementById('actEditDate' + props.act.id).value;
         let actNum = document.getElementById('actEditNum' + props.act.id).value;
         let actSum = document.getElementById('actEditSum' + props.act.id).value;
+        actSum = actSum.replace(/,/g, '.')
         let dataToSend = {id: props.act.id, actNumber: actNum, actPayment: actSum, actDate: actDate + "T00:00:00", fK_ContractId: props.act.fK_ContractId}
         console.log(dataToSend);
         var data = await fetch(SERVER_LINK + DELETE_UPDATE_ACT + props.act.id, {

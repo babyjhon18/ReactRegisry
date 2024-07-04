@@ -25,7 +25,7 @@ import { ImBooks } from "react-icons/im";
 import { GiReceiveMoney } from "react-icons/gi";
 import { BsExclamationCircleFill  } from "react-icons/bs";
 //import constants
-import { CREATE_GET_CONTRACT, jsonHeaderCommissionWorks, jsonHeaderRegistry, jsonHeaderShouldBePaid, jsonHeaderWorkPlan, SERVER_LINK, UPDATE_CTC_VIEW } from '../../Constants';
+import { CREATE_GET_CONTRACT, jsonHeaderArchive, jsonHeaderCommissionWorks, jsonHeaderRegistry, jsonHeaderShouldBePaid, jsonHeaderWorkPlan, SERVER_LINK, UPDATE_CTC_VIEW } from '../../Constants';
 import close from '..//..//images/close.png';
 import BlackList from '../BlackList/BlackList';
 import { COLOR } from 'rsuite/esm/utils/constants';
@@ -33,6 +33,8 @@ import UnpaidRowElement from '../UnpaidRowElement/UnpaidRowElement';
 import CommissioningWorksHeader from '../CommissioningWorksHeader/CommissioningWorksHeader';
 import { useCookies } from 'react-cookie';
 import UnpaidRowHeader from '../UnpaidRowHeader/UnpaidRowHeader';
+import ArchiveHeader from '../ArchiveHeader/ArchiveHeader';
+import ArchiveElement from '../ArchiveElement/ArchiveElement';
 
 function Body() {  
 
@@ -114,7 +116,7 @@ function Body() {
             icon={<GiReceiveMoney />}>Неоплаченные</MenuItem>
             <MenuItem 
             active={activate === 3} 
-            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=3', 3, jsonHeaderRegistry)} 
+            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=3', 3, jsonHeaderArchive)} 
             icon={<FaArchive />}>Архив</MenuItem>
           </Menu>
         </SidebarContent>
@@ -145,6 +147,8 @@ function Body() {
             <WorkPlanHeader contract={header}></WorkPlanHeader> : 
             c.currentTab == 2 ?
             <UnpaidRowHeader contract={header}></UnpaidRowHeader> : 
+            c.currentTab == 3 ? 
+            <ArchiveHeader contract={header}> </ArchiveHeader> :
             c.currentTab == 5 ? 
             <CommissioningWorksHeader contract={header}> </CommissioningWorksHeader> :
             <RowHeader contract={header}></RowHeader> 
@@ -158,6 +162,8 @@ function Body() {
                     <WorkPlanRowElement key={index} contract={contract}></WorkPlanRowElement> : 
                     c.currentTab == 2 ?
                     <UnpaidRowElement key={index} contract={contract}></UnpaidRowElement> : 
+                    c.currentTab == 3 ?
+                    <ArchiveElement key={index} contract={contract}></ArchiveElement> :
                     c.currentTab == 5 ?
                     <CommissioningRowElement key={index} contract={contract}></CommissioningRowElement> :
                     <RowElement key={index} contract={contract}></RowElement>

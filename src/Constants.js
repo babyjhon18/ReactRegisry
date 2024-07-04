@@ -125,4 +125,26 @@ export const jsonHeaderRegistry = {
     comment:null,
     htmlSpecification:null
   }
+
+  //jsonHeaderRegistry
+
+  export const jsonHeaderArchive = {
+    id:1,
+    notes:"Заметки",
+    description:"Наименование договора",
+    client:"Заказчик",
+    contractNumber:"Договор №",
+    contractDate:"Дата",
+    clientId:1,
+    amount:"Сумма",
+    percent:"Оплата %",
+    termsOfPaymentId:3,
+    signatureMark:"В работе",
+    sawContract: "Подпись",
+    readyMark:"Готовность",
+    deadlineCondition:"Срок поставки",
+    ourDelivery:"Доставка",
+    comment:null,
+    htmlSpecification:null
+  }
   

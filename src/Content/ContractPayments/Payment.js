@@ -27,6 +27,7 @@ function Payment(props){
         let paymentDate = document.getElementById('paymentEditDate' + props.payment.id).value;
         let paymentNum = document.getElementById('paymentEditNum' + props.payment.id).value;
         let paymnetSum = document.getElementById('paymentEditSum' + props.payment.id).value;
+        paymnetSum = paymnetSum.replace(/,/g, '.')
         let dataToSend = {id: props.payment.id, paymentDate: paymentDate + "T00:00:00", paymentNumber: paymentNum,
              paymentSum: paymnetSum, fK_ContractId: props.payment.fK_ContractId}
         var data = await fetch(SERVER_LINK + DELETE_UPDATE_PAYMENTS + props.payment.id, {

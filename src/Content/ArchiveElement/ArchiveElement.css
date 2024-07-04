@@ -1,0 +1,164 @@
+.mainDiv{
+    cursor: default;
+    display: flex;
+    box-shadow: 0px 1px 0px 0px #d9d9d9;
+    margin: 2px;
+    background-color: rgb(251, 251, 251);
+    border-radius: 0px;
+    height: 50px;
+    color: rgba(0, 0, 0, 0.65);
+}
+.zindex{
+    z-index: 0;
+}
+.mainDiv:hover{
+    background-color: rgba(0, 0, 0, 0.06);
+    box-shadow: 0px 1px 0px 0px #3779b78d;
+}
+.mainDiv .col-lg-3{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 8px;
+}
+.mainDiv .col-lg-2{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    padding: 8px;
+}
+.mainDiv .col-lg-1{
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+    padding: 8px;
+}
+.statusImg{
+    margin-right: 50px;
+    width: 50px;
+    height: 50px;
+}
+#aboutImg{
+    width: 35px;
+    height: 35px;
+    padding: 5px 5px 5px 5px;
+}
+#specImg{
+    width: 40px;
+    height: 40px;
+    margin: auto;
+}
+.mPopupSpecification {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+.modal-body {
+    padding: 2px 12px;
+    background-color: white;
+}
+.specification-table{
+    margin: auto;
+    color: #377AB7;
+}
+.modal-background-specification{
+    position: relative;
+    padding: 0px;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.3s;
+    animation-name: animatetop;
+    animation-duration: 0.3s;
+    margin: auto;
+    width: 60%;
+    border-radius: 5px;
+    background-color: white;
+}
+.modal-background-acts{
+    position: relative;
+    padding: 0px;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.3s;
+    animation-name: animatetop;
+    animation-duration: 0.3s;
+    margin: auto;
+    width: 55%;
+    border-radius: 5px;
+    background-color: white;
+}
+.modal-background-sign{
+    position: relative;
+    padding: 0px;
+    -webkit-animation-name: animatetop;
+    -webkit-animation-duration: 0.3s;
+    animation-name: animatetop;
+    animation-duration: 0.3s;
+    margin: auto;
+    width: 30%;
+    border-radius: 5px;
+    background-color: white;
+}
+.close-img{
+    width: 30px;
+    height: 30px;
+    background-color: #377AB7;
+    border-radius: 50%;
+}
+.close-img:hover{
+    background-color: #0b67b8;
+    border-radius: 50%;
+}
+.specification-description{
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    font-size: medium;
+    font-weight: bold;
+    background-color: #377AB7;
+    color: white;
+    border-radius: 5px 5px 0px 0px;
+}
+.click-style{
+    border-radius: 45%;
+}
+
+.click-style:hover{
+    background-color: rgb(217, 217, 217);
+    cursor: pointer;
+}
+.dropDownMenu{
+    border-radius: 5px;
+    border: solid 0.2px #d9d9d9;
+    color: black;
+    display: none;
+    position: absolute;
+    margin-left: 15px;
+    background-color: rgba(255, 255, 255, 1);
+    cursor: pointer;
+}
+.dropDownMenuItem{
+    margin: 5px;
+    padding: 2px;
+    width: 165px;
+    display: flex;;
+}
+.dropDownMenuItem:hover{
+    color: #377AB7;
+}
+@-webkit-keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
+@keyframes animatetop {
+    from {top:-300px; opacity:0}
+    to {top:0; opacity:1}
+}
