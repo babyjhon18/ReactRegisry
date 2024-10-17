@@ -8,6 +8,7 @@ function SignContract(props){
     const clients = useSelector(state => state.contractReduser)
     const dispatch = useDispatch();
     const [dateTime, setDate] = useState(new Date()); 
+    const [signMark, setSignMark] = useState(); 
     
     async function saveCommentAndStatusOfContract(contract){ 
         let readyToWorkDate = document.getElementById("readyToWorkDate" + contract.id).value;
@@ -44,6 +45,7 @@ function SignContract(props){
 
     useEffect(()=>{
         setDate(props.contractDescription.signDate.split('T')[0]);
+        setSignMark(props.contractDescription.contractAcceptedBy);
     },[clients])
 
     const handleInputChange = (e) => {
@@ -66,7 +68,7 @@ function SignContract(props){
                 }
                 <div className="row" style={{margin: "5px 0px"}}>
                     Комментарий: &nbsp;<textarea id={"comment"+props.contractDescription.id} 
-                    className='NumberContractInputReadyToConst textAlignStart' type={"text"}>{props.contractDescription.comment}</textarea>
+                    className='NumberContractInputReadyToConst textAlignStart' defaultValue={props.contractDescription.comment} type={"text"}></textarea>
                 </div>
                 {
                     props.contractDescription.sawContract ? (
@@ -84,9 +86,9 @@ function SignContract(props){
                     type='date' className='datetime-pickers' onChange={handleInputChange} value={dateTime}></input>
                 </div>
                 <div className="row" style={{margin: "5px 0px"}}>
-                    Утверждён: &nbsp;<textarea id={"contractSawBy"+props.contractDescription.id} 
-                    placeholder='Фамилия Имя Отчество, утвердившего договор'
-                    className='NumberContractInputReadyToConst textAlignStart' type={"text"}>{props.contractDescription.contractAcceptedBy}</textarea>
+                    Утверждён: &nbsp; <textarea id={"contractSawBy"+props.contractDescription.id} 
+                        placeholder='Фамилия Имя Отчество, утвердившего договор'
+                        className='NumberContractInputReadyToConst textAlignStart' type={"text"}>{signMark}</textarea>
                 </div>
              </div>
              <div style={{padding: "10px", margin: "auto", marginRight: "25px", minWidth: "80px", maxWidth: "100px"}}>

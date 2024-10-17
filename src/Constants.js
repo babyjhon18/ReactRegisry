@@ -126,8 +126,6 @@ export const jsonHeaderRegistry = {
     htmlSpecification:null
   }
 
-  //jsonHeaderRegistry
-
   export const jsonHeaderArchive = {
     id:1,
     notes:"Заметки",

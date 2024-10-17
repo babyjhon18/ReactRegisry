@@ -6,11 +6,17 @@
     align-items: center;
 }
 
+.absoluteSearchHistory{
+    position: absolute;
+}
+
 .searchContractInput{
     margin: 10px;
     border-radius: 3px;
     border: 2px solid white;
     width: 350px;
+    margin-left: -2px;
+    margin-top: -2px;
 }
 
 .datetime-pickers{
@@ -63,8 +69,24 @@ button:hover{
     background-color: rgba(230, 230, 230, 1);
 }
 
+.searchBarHistory .dropdown-toggle::after{
+    display: none !important;
+}
+
+.searchBarHistory #dropdown-autoclose-inside{
+    background-color: transparent;
+    width: 350px;
+    height: 30px;
+    margin: 0px !important;
+    padding: 0px;
+}
+
 .sortBtn:active {
     transform: translateY(1px);
+}
+
+.searchBarHistory #drop-down-menu-items{
+    width: 350px !important;
 }
 
 .sortBtn img{

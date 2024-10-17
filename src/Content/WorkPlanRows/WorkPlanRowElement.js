@@ -24,6 +24,7 @@ function WorkPlanRowElement(props){
     const [termsOfPaymentName, setTermsOfPaymentName] = useState(); 
     const [daysLeft, setDaysLeft] = useState();
     const [paymentPercent, setPaymentPercent] = useState();
+    const [daysLeftText, setDaysLeftText] = useState();
     const store = useSelector(state => state.contractReduser)
 
     var mPopupSpecification = document.getElementById('mpopupBox')
@@ -105,69 +106,107 @@ function WorkPlanRowElement(props){
         }
     }, [store])
 
+    function SetDaysLeftText(daysLeftCount){
+        var lastone = +daysLeftCount.toString().split('').pop();
+        if(lastone == 1){
+            setDaysLeftText('день')
+            if (daysLeftCount == 11){
+                setDaysLeftText('дней')
+            }
+        }
+        else if( 2 <= lastone && lastone <= 4){
+            console.log(daysLeftCount);
+            if(daysLeftCount == 12 || daysLeftCount == 13 || daysLeftCount == 14 || daysLeftCount == -14 || daysLeftCount == -13 || daysLeftCount == -12){
+                setDaysLeftText('дней')
+            }
+            setDaysLeftText('дня')
+        }
+        else if(5 <= lastone && lastone <= 10 || lastone == 0){
+            setDaysLeftText('дней')
+        }
+    }
+
     function SetDescriptionColors(daysLeftCount){
         var element = document.getElementById('mainDiv' + props.contract.contract.id);
         element.classList.remove("alarmColor");
         element.classList.remove("shouldBeDoneSoon");
         element.classList.remove("alarmAnimation");
         element.classList.remove("done");
-        if(store.currentTab != 3){
-            currentDay.setDate(currentDay.getDate() - 1)
-            if (daysLeftCount > 10){
-                setDaysLeft(daysLeftCount)
-                element.classList.remove("alarmColor");
-                element.classList.remove("shouldBeDoneSoon");
-                element.classList.remove("alarmAnimation");
-                element.classList.remove("submitedToday");
-                element.classList.remove("done");
+        if(!props.contract.contract.ourDelivery){
+            if(store.currentTab != 3){
+                currentDay.setDate(currentDay.getDate() - 1)
+                if (daysLeftCount > 10){
+                    setDaysLeft(daysLeftCount)
+                    SetDaysLeftText(daysLeftCount)
+                    element.classList.remove("alarmColor");
+                    element.classList.remove("shouldBeDoneSoon");
+                    element.classList.remove("alarmAnimation");
+                    element.classList.remove("submitedToday");
+                    element.classList.remove("done");
+                }
+                if(currentDay.toJSON().split('T')[0] == props.contract.contract.dayToPlan.split('T')[0]){
+                    setDaysLeft(daysLeftCount);
+                    SetDaysLeftText(daysLeftCount)
+                    element.classList.remove("alarmAnimation");
+                    element.classList.remove("shouldBeDoneSoon");
+                    element.classList.remove("alarmColor");
+                    element.classList.add("submitedToday");
+                    element.classList.remove("done");
+                }
+                if(daysLeftCount == 0){
+                    setDaysLeft("Отгрузка!")
+                }
+                if(daysLeftCount <= 10){
+                    setDaysLeft(daysLeftCount)
+                    SetDaysLeftText(daysLeftCount)
+                    element.classList.remove("alarmColor");
+                    element.classList.add("shouldBeDoneSoon");
+                    element.classList.remove("alarmAnimation");
+                    element.classList.remove("submitedToday");
+                    element.classList.remove("done");
+                } 
+                if(daysLeftCount <= 5){
+                    setDaysLeft(daysLeftCount)
+                    SetDaysLeftText(daysLeftCount)
+                    element.classList.add("alarmColor");
+                    element.classList.remove("shouldBeDoneSoon");
+                    element.classList.remove("alarmAnimation");
+                    element.classList.remove("submitedToday");
+                    element.classList.remove("done");
+                } 
+                if(daysLeftCount <= 0 && props.contract.contract.readyMark == false){
+                    setDaysLeft(daysLeftCount);
+                    SetDaysLeftText(daysLeftCount)
+                    element.classList.add("alarmAnimation");
+                    element.classList.remove("shouldBeDoneSoon");
+                    element.classList.remove("alarmColor");
+                    element.classList.remove("submitedToday");
+                    element.classList.remove("done");
+                } 
+                //done
+                if(props.contract.contract.readyMark){
+                    setDaysLeft(daysLeftCount)
+                    SetDaysLeftText(daysLeftCount)
+                    element.classList.add("done");
+                    element.classList.remove("alarmColor");
+                    element.classList.remove("shouldBeDoneSoon");
+                    element.classList.remove("alarmAnimation");
+                    element.classList.remove("submitedToday");
+                }
             }
-            if(currentDay.toJSON().split('T')[0] == props.contract.contract.dayToPlan.split('T')[0]){
-                setDaysLeft(daysLeftCount);
-                element.classList.remove("alarmAnimation");
-                element.classList.remove("shouldBeDoneSoon");
-                element.classList.remove("alarmColor");
-                element.classList.add("submitedToday");
-                element.classList.remove("done");
-            }
-            if(daysLeftCount == 0){
-                setDaysLeft("Отгрузка!")
-            }
-            if(daysLeftCount <= 10){
-                setDaysLeft(daysLeftCount)
-                element.classList.remove("alarmColor");
-                element.classList.add("shouldBeDoneSoon");
-                element.classList.remove("alarmAnimation");
-                element.classList.remove("submitedToday");
-                element.classList.remove("done");
-            } 
-            if(daysLeftCount <= 5){
-                setDaysLeft(daysLeftCount)
-                element.classList.add("alarmColor");
-                element.classList.remove("shouldBeDoneSoon");
-                element.classList.remove("alarmAnimation");
-                element.classList.remove("submitedToday");
-                element.classList.remove("done");
-            } 
-            if(daysLeftCount <= 0 && props.contract.contract.readyMark == false){
-                setDaysLeft(daysLeftCount);
-                element.classList.add("alarmAnimation");
-                element.classList.remove("shouldBeDoneSoon");
-                element.classList.remove("alarmColor");
-                element.classList.remove("submitedToday");
-                element.classList.remove("done");
-            } 
-            //done
-            if(props.contract.contract.readyMark){
-                setDaysLeft(daysLeftCount)
-                element.classList.add("done");
-                element.classList.remove("alarmColor");
-                element.classList.remove("shouldBeDoneSoon");
-                element.classList.remove("alarmAnimation");
-                element.classList.remove("submitedToday");
+            else{
+                setDaysLeft("Отдан")
             }
         }
         else{
-            setDaysLeft("Отдан")
+            setDaysLeft(daysLeftCount)
+            SetDaysLeftText(daysLeftCount)
+            element.classList.add("delivery");
+            element.classList.remove("alarmColor");
+            element.classList.remove("shouldBeDoneSoon");
+            element.classList.remove("alarmAnimation");
+            element.classList.remove("submitedToday");
+            element.classList.remove("done");
         }
     }
 
@@ -377,7 +416,7 @@ function WorkPlanRowElement(props){
                 </div>
                 <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
                     style={{margin: "auto 0px",maxWidth: "150px",minWidth: "140px"}}>
-                    { daysLeft != 0 ? daysLeft + " дней(я)" : "Отгрузка!"}
+                    { daysLeft != 0 ? daysLeft + " " + daysLeftText : "Отгрузка!"}
                     { 
                         daysLeft < 0 ? <img title="И так сойдет!" style={{height: "35px", width: "35px"}} src={alarm}></img> : <div></div>
                     }

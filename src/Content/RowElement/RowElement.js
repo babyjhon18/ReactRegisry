@@ -72,6 +72,8 @@ function RowElement(props){
         bar.classList.add('zindex');
         mpopupSign = document.getElementById('mpopupSign' + id);
         mpopupSign.style.display = "block";
+        var textArea = document.getElementById("contractSawBy"+currentContractId);
+        textArea.value = props.contract.contract.contractAcceptedBy;
     }
 
     function specificationClicked(){
@@ -153,6 +155,8 @@ function RowElement(props){
     }
 
     function closeSignView(){
+        var textArea = document.getElementById("contractSawBy"+currentContractId);
+        textArea.value = "";
         mpopupSign = document.getElementById('mpopupSign' + currentContractId)
         mpopupSign.style.display = "none"; 
         let bar = document.getElementById('bar');
@@ -180,10 +184,10 @@ function RowElement(props){
         else{
             mPopupActs = document.getElementById(event.target.id);
             mPopupPayments = document.getElementById(event.target.id);
-            if(mPopupActs.textContent.indexOf(actToClose !== -1)){
-            }
-            if(mPopupPayments.textContent.indexOf(paymentToClose !== -1)){
-            }
+            // if(mPopupActs.textContent.indexOf(actToClose !== -1)){
+            // }
+            // if(mPopupPayments.textContent.indexOf(paymentToClose !== -1)){
+            // }
         }
     };
 

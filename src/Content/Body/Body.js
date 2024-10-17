@@ -4,16 +4,11 @@ import "react-pro-sidebar/dist/css/styles.css";
 //import logic utils
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from 'react-redux';
+import { useIdle } from 'react-use';
 //import network 
 import axios from 'axios'
 //import custom controls
-import {
-  ProSidebar,
-  Menu,
-  MenuItem,
-  SidebarFooter,
-  SidebarContent,
-} from "react-pro-sidebar";
+import { ProSidebar, Menu, MenuItem, SidebarFooter, SidebarContent } from "react-pro-sidebar";
 import RowElement from '../RowElement/RowElement'
 import WorkPlanRowElement from '../WorkPlanRows/WorkPlanRowElement'
 import CommissioningRowElement from '../CommissioningWorksRow/CommissioningRowElement'
@@ -28,13 +23,12 @@ import { BsExclamationCircleFill  } from "react-icons/bs";
 import { CREATE_GET_CONTRACT, jsonHeaderArchive, jsonHeaderCommissionWorks, jsonHeaderRegistry, jsonHeaderShouldBePaid, jsonHeaderWorkPlan, SERVER_LINK, UPDATE_CTC_VIEW } from '../../Constants';
 import close from '..//..//images/close.png';
 import BlackList from '../BlackList/BlackList';
-import { COLOR } from 'rsuite/esm/utils/constants';
 import UnpaidRowElement from '../UnpaidRowElement/UnpaidRowElement';
 import CommissioningWorksHeader from '../CommissioningWorksHeader/CommissioningWorksHeader';
 import { useCookies } from 'react-cookie';
 import UnpaidRowHeader from '../UnpaidRowHeader/UnpaidRowHeader';
 import ArchiveHeader from '../ArchiveHeader/ArchiveHeader';
-import ArchiveElement from '../ArchiveElement/ArchiveElement';
+import ArchiveElement from '../ArchiveElement/ArchElement';
 
 function Body() {  
 
@@ -43,13 +37,29 @@ function Body() {
   const [menuCollapse, setMenuCollapse] = useState(true);
   const [activate, setMenuActivate] = useState(0);
   const [header, setHeader] = useState(jsonHeaderRegistry);
+  const [firstOpening, setFirstOpening] = useState(true);
   const [cookies, setCookies] = useCookies();
   const dispatch = useDispatch();
   var mPopupBlackList = document.getElementById('mpopupBlackListId');
 
+  const isIdle = useIdle(300000);//900000 15 minutes
+
   useEffect(() => {
-    fetchData(SERVER_LINK + CREATE_GET_CONTRACT, 0, jsonHeaderRegistry);
-  }, []);
+    if(firstOpening){
+      console.log(firstOpening)
+      fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=' + activate, activate, header);
+      setFirstOpening(false);
+    }else{
+      if(isIdle){
+        console.log('fetching....');
+        const interval = setInterval(() => { 
+          //console.log(activate, header)
+          fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=' + activate, activate, header);
+        }, 300000);
+        return () => clearInterval(interval) 
+      }
+    }
+  }, [isIdle]);
 
   const onMouseOn = () => {
     setMenuCollapse(false);
@@ -60,8 +70,9 @@ function Body() {
   };
 
   const getData = async (link, index) => {
+    console.log(link);
     await axios.get(link).then((response) => {
-      dispatch({type: UPDATE_CTC_VIEW, payload: response.data, link: link, header: header, tab: index, dateFrom: cookies.dateFrom, dateTo: cookies.dateTo})
+      dispatch({type: UPDATE_CTC_VIEW, payload: response.data, link: link, header: header, tab: index, dateFrom: localStorage.getItem("dateFrom"), dateTo: localStorage.getItem("dateTo")})
     });
   };
 
@@ -89,7 +100,9 @@ function Body() {
     getData(link, index);
   };
 
-  return ( <div>
+  return (
+    console.log('is idle', isIdle), 
+  <div>
     <div id="bar">
       <ProSidebar onMouseOver={onMouseOn} onMouseOut={onMouseOut} collapsed={menuCollapse}>
         <SidebarContent>
@@ -129,7 +142,7 @@ function Body() {
         </SidebarFooter>
       </ProSidebar>
     </div>
-    <div id="mpopupBlackListId" class="mPopupBlackList">
+    <div id="mpopupBlackListId" className="mPopupBlackList">
       <div className="modal-background-blackList">
           <div className="specification-description">
               <div id="blackListDesc"></div>

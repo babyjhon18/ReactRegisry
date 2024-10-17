@@ -25,3 +25,91 @@
     text-align: left;
     padding: 8px;
 }
+@media (max-width: 1200px) {
+    #mainBody{
+        overflow-x: scroll !important;
+    }
+}
+@media (max-width: 1300px) {
+    #mainBody{
+        overflow-x: scroll !important;
+    }
+}
+@media (max-width: 1400px) {
+    #mainBody{
+        overflow-x: scroll !important;
+    }
+}
+@media (max-width: 1500px) {
+    #mainBody{
+        overflow-x: scroll !important;
+    }
+}
+@media (max-width: 1600px) {
+    #mainBody{
+        overflow-x: scroll !important;
+    }
+}
+@media (max-width: 1700px) {
+    #mainBody{
+        overflow-x: scroll !important;
+    }
+}
+
+
+@media (min-width: 1000px) {
+    .mainDiv{
+        width: 165% !important;
+    }
+    #row{
+        width: 167% !important;
+    }
+}
+@media (min-width: 1100px) {
+    .mainDiv{
+        width: 155% !important;
+    }
+    #row{
+        width: 157% !important;
+    }
+}
+@media (min-width: 1200px) {
+    .mainDiv{
+        width: 145% !important;
+    }
+    #row{
+        width: 147% !important;
+    }
+}
+@media (min-width: 1300px) {
+    .mainDiv{
+        width: 135% !important;
+    }
+    #row{
+        width: 137% !important;
+    }
+}
+@media (min-width: 1400px) {
+    .mainDiv{
+        width: 125% !important;
+    }
+    #row{
+        width: 127% !important;
+    }
+}
+@media (min-width: 1500px) {
+    .mainDiv{
+        width: 115% !important;
+    }
+    #row{
+        width: 117% !important;
+    }
+}
+@media (min-width: 1600px) {
+    .mainDiv{
+        width: 100% !important;
+    }
+    #row{
+        width: 102% !important;
+    }
+}

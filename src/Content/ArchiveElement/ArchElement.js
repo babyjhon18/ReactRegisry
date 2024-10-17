@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import '..//ArchiveElement//ArchiveElement.css';
-import readyImage from '..//..//images/ready.png';
-import notReadyImage from '..//..//images/notReady.png';
 import attention from '..//..//images/attentionBlackList.png';
 import notOurDeliveryImage from '..//..//images/delivery.png';
 import ourDeliveryImage from '..//..//images/ourDelivery.png';

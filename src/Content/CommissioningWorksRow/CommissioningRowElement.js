@@ -23,6 +23,7 @@ function CommissioningRowElement(props){
     const [termsOfPaymentName, setTermsOfPaymentName] = useState(); 
     const [daysLeft, setDaysLeft] = useState();
     const [paymentPercent, setPaymentPercent] = useState();
+    const [daysLeftText, setDaysLeftText] = useState();
     const store = useSelector(state => state.contractReduser)
 
     var mPopupSpecification = document.getElementById('mpopupBox')
@@ -98,6 +99,26 @@ function CommissioningRowElement(props){
         }
     }, [store])
 
+    function SetDaysLeftText(daysLeftCount){
+        var lastone = +daysLeftCount.toString().split('').pop();
+        if(lastone == 1){
+            setDaysLeftText('день')
+            if (daysLeftCount == 11){
+                setDaysLeftText('дней')
+            }
+        }
+        else if( 2 <= lastone && lastone <= 4){
+            console.log(daysLeftCount);
+            setDaysLeftText('дня')
+            if(daysLeftCount == 12 || daysLeftCount == 13 || daysLeftCount == 14 || daysLeftCount == -14 || daysLeftCount == -13 || daysLeftCount == -12){
+                setDaysLeftText('дней')
+            }
+        }
+        else if(5 <= lastone && lastone <= 10 || lastone == 0){
+            setDaysLeftText('дней')
+        }
+    }
+
     function SetDescriptionColors(daysLeftCount){
         var element = document.getElementById('mainDiv' + props.contract.contract.id);
         element.classList.remove("alarmColor");
@@ -109,24 +130,28 @@ function CommissioningRowElement(props){
             }
             if (daysLeftCount > 10){
                 setDaysLeft(daysLeftCount)
+                SetDaysLeftText(daysLeftCount)
                 element.classList.remove("alarmColor");
                 element.classList.remove("shouldBeDoneSoon");
                 element.classList.remove("alarmAnimation");
             }
             if(daysLeftCount <= 10){
                 setDaysLeft(daysLeftCount)
+                SetDaysLeftText(daysLeftCount)
                 element.classList.remove("alarmColor");
                 element.classList.add("shouldBeDoneSoon");
                 element.classList.remove("alarmAnimation");
             } 
             if(daysLeftCount <= 5){
                 setDaysLeft(daysLeftCount)
+                SetDaysLeftText(daysLeftCount)
                 element.classList.add("alarmColor");
                 element.classList.remove("shouldBeDoneSoon");
                 element.classList.remove("alarmAnimation");
             } 
             if(daysLeftCount <= 0 && props.contract.contract.readyMark == false){
                 setDaysLeft(daysLeftCount);
+                SetDaysLeftText(daysLeftCount)
                 element.classList.add("alarmAnimation");
                 element.classList.remove("shouldBeDoneSoon");
                 element.classList.remove("alarmColor");
@@ -343,7 +368,7 @@ function CommissioningRowElement(props){
                 </div>
                 <div className="col-md-1 col-sm-1 col-lg-1 col-xs-1 col-xl-1" 
                     style={{margin: "auto 0px",maxWidth: "150px",minWidth: "140px"}}>
-                    { daysLeft != 0 ? daysLeft + " дней(я)" : "Отгрузка!"}
+                    { daysLeft != 0 ? daysLeft + " " + daysLeftText : "Отгрузка!"}
                     { 
                         daysLeft < 0 ? <img title="И так сойдет!" style={{height: "35px", width: "35px"}} src={alarm}></img> : <div></div>
                     }

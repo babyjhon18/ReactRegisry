@@ -284,16 +284,25 @@ export function contractReduser(state = contractState, action){
                     break;
                 case 1: 
                     var finalResult = state.defaultContracts.clients.filter((client) => {
-                        let finalRes = client.fullName.toLowerCase(); 
-                        return finalRes.indexOf(action.keyword.toLowerCase()) !== -1;
+                        if(client.fullName !== null && client.fullName !== undefined){
+                            let finalRes = client.fullName.toLowerCase();
+                            return finalRes.indexOf(action.keyword.toLowerCase()) !== -1;
+                        }
                     });
                     var searchedItems = state.defaultContracts.contracts.filter((element) => {
                         return finalResult.some((f) => {
+                            console.log(f);
                             return f.id == element.contract.clientId;
                         });
                     });
                     break;
                 case 2:
+                    var searchedItems = state.defaultContracts.contracts.filter((element) => {
+                        let finalRes = element.contract.description.toLowerCase();
+                        return finalRes.indexOf(action.keyword.toLowerCase()) !== -1
+                    });
+                    break;
+                case 3:
                     var searchedItems = state.defaultContracts.contracts;
                     break;
             }

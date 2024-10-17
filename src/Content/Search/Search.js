@@ -8,6 +8,7 @@ import downloadFile from '../../images/downloadContract.png'
 import {React, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { SEARCH_CTC, SERVER_LINK, SORT_BY_DATE, SORT_CTC, TEMPLATE_LINK } from '../../Constants';
+import { Form } from 'react-bootstrap';
 
 function Search(){
 
@@ -21,26 +22,30 @@ function Search(){
     const [searchInputValue, setSearchInputValue] = useState("");
     const [sortDirection, setSortDirection] = useState(true);
     const [sortType, setSortType] = useState(3);
-    const [cookies, setCookies] = useCookies(['dateFrom', 'dateTo'])
-    var cookiesExpiresDate = new Date();
+    const [searchHistory, setSearchHistory] = useState([]);
 
     useEffect(() => {
-        console.log(cookies);
+        if(localStorage.getItem("searchHistory") != undefined){
+            var localSearch = localStorage.getItem("searchHistory").split(",");
+            setSearchHistory(localSearch)
+            console.log(searchHistory)
+        }
         setSortDirection(false);   
         const currentYear = new Date().getFullYear();
-        if(cookies.dateFrom != "")
-            setDateFrom(cookies.dateFrom);
+        if(localStorage.getItem("dateFrom") != undefined){
+            setDateFrom(localStorage.getItem("dateFrom"));
+        }
         else
             setDateFrom(currentYear + "-01-01");
         const date = new Date().toLocaleDateString();
-        if(cookies.dateTo != "")
-            setDateTo(cookies.dateTo);
+        if(localStorage.getItem("dateTo") != undefined){
+            setDateTo(localStorage.getItem("dateTo"));
+        }
         else
             setDateTo(date.split('.').reverse().join('-'));
     },[]);
 
     const doFetchDownload = () => {
-
         fetch(SERVER_LINK + TEMPLATE_LINK)
             .then(resp => resp.blob())
             .then(blob => {
@@ -72,12 +77,23 @@ function Search(){
     const searchFieldChange = event => {
         setSearchInputValue(event.target.value); 
         if(event.target.value == ""){
-            dispatch({type: SEARCH_CTC, keyword: event.target.value, index: 2}); 
+            dispatch({type: SEARCH_CTC, keyword: event.target.value, index: 3}); 
             dispatch({type: SORT_BY_DATE, dateFrom: dateFrom, dateTo: dateTo, sortType: sortType})
         }
     }
 
     const search = () => {
+        console.log('searching....', searchInputValue)
+        if(searchInputValue != ""){
+            localStorage.setItem("searchHistory",searchInputValue + "," + localStorage.getItem("searchHistory"))
+            setSearchHistory(localStorage.getItem("searchHistory").split(","))
+            if(searchHistory.length > 4){
+                let searchHistoryLimited = localStorage.getItem("searchHistory").split(",");
+                searchHistoryLimited.pop();
+                setSearchHistory(searchHistoryLimited);
+                localStorage.setItem("searchHistory", searchHistoryLimited)
+            }
+        }
         dispatch({type: SEARCH_CTC, keyword: searchInputValue, index: searchItemIndex}); 
     }
 
@@ -123,14 +139,17 @@ function Search(){
                 setSearchItemIndex(index);
                 break;
             }
+            case 2:{
+                setPlaceholder("Поиск по наименованию договора...");
+                setSearchItemIndex(index);
+                break;
+            }
         }
     }
 
     const handleDateFromChange = (e) => {
         setDateFrom(e.target.value);
-        var expiryDate = new Date();
-        expiryDate.setMonth(expiryDate.getMonth() + 1);
-        setCookies('dateFrom', e.target.value, { expires: expiryDate })
+        localStorage.setItem("dateFrom", e.target.value);
         if(e.target.value === ""){
             dispatch({type: SORT_CTC, sortDirection: sortDirection})
         }
@@ -141,9 +160,7 @@ function Search(){
 
     const handleDateToChange = (e) => {
         setDateTo(e.target.value);
-        var expiryDateTo = new Date();
-        expiryDateTo.setMonth(expiryDateTo.getMonth() + 1);
-        setCookies('dateTo', e.target.value, { expires: expiryDateTo })
+        localStorage.setItem("dateTo", e.target.value);
         if(e.target.value === ""){
             dispatch({type: SORT_CTC, sortDirection: sortDirection})
         }
@@ -152,10 +169,26 @@ function Search(){
         }
     }
 
+    const searchFromHistory = event => {
+        console.log(event);
+        setSearchInputValue(event);
+        dispatch({type: SEARCH_CTC, keyword: event, index: searchItemIndex}); 
+    }
+
     return (<div className='divLogo'>
-        <div>
-            <input className='searchContractInput' onChange={searchFieldChange} 
-             placeholder={searchItemPlaceholder} type='text' value={searchInputValue}></input>
+        <div className='searchBarHistory'>
+        <Dropdown className="mx-2">
+            <Dropdown.Toggle id="dropdown-autoclose-inside">
+                <input className='searchContractInput' onChange={searchFieldChange} 
+                placeholder={searchItemPlaceholder} type='text' value={searchInputValue}></input>
+             </Dropdown.Toggle>
+             <Dropdown.Menu id="drop-down-menu-items">
+                {searchHistory.map((history, index) =>
+                (
+                    <Dropdown.Item id="drop-down-menu-item" type="button" onClick={() => searchFromHistory(history)}>{history}</Dropdown.Item>
+                ))}
+                </Dropdown.Menu>
+            </Dropdown>
         </div>  
         <div>
             <Dropdown className="mx-2">
@@ -165,6 +198,7 @@ function Search(){
                 <Dropdown.Menu id="drop-down-menu-items">
                     <Dropdown.Item id="drop-down-menu-item" type="button" onClick={() => onSelectedItem(0)}>по номеру договора</Dropdown.Item>
                     <Dropdown.Item id="drop-down-menu-item" type="button" onClick={() => onSelectedItem(1)}>по наименованию заказчика</Dropdown.Item>
+                    <Dropdown.Item id="drop-down-menu-item" type="button" onClick={() => onSelectedItem(2)}>по наименованию договора</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
         </div>
@@ -196,7 +230,7 @@ function Search(){
                 </Dropdown.Menu>
             </Dropdown>
         </div>
-        <div class="sortBtn">
+        <div className="sortBtn">
             <img style={{margin: "2px"}} onClick={sortClick} src={sortUp}></img>
         </div>
         {/* <div class="downloadContract" title='Новый договор'>

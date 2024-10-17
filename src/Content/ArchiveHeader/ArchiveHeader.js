@@ -1,6 +1,5 @@
 import '..//ArchiveHeader//ArchiveHeader.css'
 
-
 function ArchiveHeader(props){  
     return (
         <div style={{padding: "0px"}} className="col-lg-12" id="mainHeaderDiv">
