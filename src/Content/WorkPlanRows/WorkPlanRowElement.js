@@ -217,6 +217,11 @@ function WorkPlanRowElement(props){
         bar.classList.add('zindex');
         mpopupReady = document.getElementById('mpopupNotes' + id);
         mpopupReady.style.display = "block";
+        let manufacturerNotes = document.getElementById("manufacturerNotes" + props.contract.contract.id);
+        manufacturerNotes.textContent = props.contract.contract.manufacturingLeadNotes;
+        console.log(props.contract.contract.manufacturingLeadNotes);
+        let manufacturerNotesColor = document.getElementById("noteColor" + props.contract.contract.id);
+        manufacturerNotesColor.value = props.contract.contract.manufacturingLeadNoteColor;
     }
 
 

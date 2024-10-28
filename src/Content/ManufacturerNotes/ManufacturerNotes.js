@@ -40,11 +40,12 @@ function SignContract(props){
                 <div style={{margin: "0px 0px", display: 'flex', alignItems: 'center'}}>
                     Цвет:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <input id={"noteColor"+props.contractDescription.id} style={{padding: "0px"}}
-                    type='color' defaultValue={props.contractDescription.manufacturingLeadNoteColor == null ? "#dfd754" : props.contractDescription.manufacturingLeadNoteColor }></input>
+                    type='color'></input>
                 </div>
+                {/* {props.contractDescription.manufacturingLeadNotes} */}
                 <div className="row" style={{margin: "5px 0px"}}>
                     Заметка:&nbsp;<textarea id={"manufacturerNotes"+props.contractDescription.id} 
-                    className='NumberContractInputReadyToConst textAlignStart' type={"text"}>{props.contractDescription.manufacturingLeadNotes}</textarea>
+                    className='NumberContractInputReadyToConst textAlignStart' type={"text"}></textarea>
                 </div>
              </div>
              <div style={{padding: "10px", margin: "auto", marginRight: "25px", minWidth: "80px", maxWidth: "100px"}}>
