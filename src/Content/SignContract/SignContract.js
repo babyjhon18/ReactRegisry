@@ -68,7 +68,7 @@ function SignContract(props){
                 }
                 <div className="row" style={{margin: "5px 0px"}}>
                     Комментарий: &nbsp;<textarea id={"comment"+props.contractDescription.id} 
-                    className='NumberContractInputReadyToConst textAlignStart' defaultValue={props.contractDescription.comment} type={"text"}></textarea>
+                    className='NumberContractInputReadyToConst textAlignStart' type={"text"}></textarea>
                 </div>
                 {
                     props.contractDescription.sawContract ? (

@@ -74,6 +74,8 @@ function RowElement(props){
         mpopupSign.style.display = "block";
         var textArea = document.getElementById("contractSawBy"+currentContractId);
         textArea.value = props.contract.contract.contractAcceptedBy;
+        var textAreaComment = document.getElementById("comment"+currentContractId);
+        textAreaComment.value = props.contract.contract.comment;
     }
 
     function specificationClicked(){
