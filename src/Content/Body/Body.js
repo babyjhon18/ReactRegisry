@@ -29,6 +29,7 @@ import { useCookies } from 'react-cookie';
 import UnpaidRowHeader from '../UnpaidRowHeader/UnpaidRowHeader';
 import ArchiveHeader from '../ArchiveHeader/ArchiveHeader';
 import ArchiveElement from '../ArchiveElement/ArchElement';
+import Loader from '../Loader';
 
 function Body() {  
 
@@ -39,6 +40,7 @@ function Body() {
   const [header, setHeader] = useState(jsonHeaderRegistry);
   const [firstOpening, setFirstOpening] = useState(true);
   const [cookies, setCookies] = useCookies();
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
   var mPopupBlackList = document.getElementById('mpopupBlackListId');
 
@@ -70,9 +72,14 @@ function Body() {
   };
 
   const getData = async (link, index) => {
-    console.log(link);
+    setIsLoading(true);
     await axios.get(link).then((response) => {
-      dispatch({type: UPDATE_CTC_VIEW, payload: response.data, link: link, header: header, tab: index, dateFrom: localStorage.getItem("dateFrom"), dateTo: localStorage.getItem("dateTo")})
+      dispatch({type: UPDATE_CTC_VIEW, payload: response.data, link: link, header: header, tab: index,
+         dateFrom: localStorage.getItem("dateFrom"),
+         dateTo: localStorage.getItem("dateTo")})
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 3000);
     });
   };
 
@@ -121,7 +128,7 @@ function Body() {
             icon={<FaScrewdriver />}>ПНР</MenuItem>
             <MenuItem 
             active={activate === 4} 
-            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=4', 4, jsonHeaderRegistry)} 
+            onClick={() => fetchData(SERVER_LINK + CREATE_GET_CONTRACT + '?contractsType=4', 4, jsonHeaderArchive)} 
             icon={<BsPatchCheckFill />}>Готовые</MenuItem>
             <MenuItem 
             active={activate === 2} 
@@ -153,38 +160,46 @@ function Body() {
           <BlackList></BlackList>
       </div>
     </div>
-    <div id="mainBody">
-        <div id="row" className='row'>
-          {
-            c.currentTab == 1 ? 
-            <WorkPlanHeader contract={header}></WorkPlanHeader> : 
-            c.currentTab == 2 ?
-            <UnpaidRowHeader contract={header}></UnpaidRowHeader> : 
-            c.currentTab == 3 ? 
-            <ArchiveHeader contract={header}> </ArchiveHeader> :
-            c.currentTab == 5 ? 
-            <CommissioningWorksHeader contract={header}> </CommissioningWorksHeader> :
-            <RowHeader contract={header}></RowHeader> 
-          }
-        </div>  
-            {c.searchedContracts && c.searchedContracts.map((contract, index) =>
-              (
-                <div className='row'>
-                  {
-                    c.currentTab == 1 ? 
-                    <WorkPlanRowElement key={index} contract={contract}></WorkPlanRowElement> : 
-                    c.currentTab == 2 ?
-                    <UnpaidRowElement key={index} contract={contract}></UnpaidRowElement> : 
-                    c.currentTab == 3 ?
-                    <ArchiveElement key={index} contract={contract}></ArchiveElement> :
-                    c.currentTab == 5 ?
-                    <CommissioningRowElement key={index} contract={contract}></CommissioningRowElement> :
-                    <RowElement key={index} contract={contract}></RowElement>
-                  }
-                </div>
-              )
-            )}
-      </div>
+    {isLoading ? 
+     <Loader />
+      :
+      (<div id="mainBody">
+          <div id="row" className='row'>
+            {
+              c.currentTab == 1 ? 
+              <WorkPlanHeader contract={header}></WorkPlanHeader> : 
+              c.currentTab == 2 ?
+              <UnpaidRowHeader contract={header}></UnpaidRowHeader> : 
+              c.currentTab == 3 ? 
+              <ArchiveHeader contract={header}></ArchiveHeader> :
+              c.currentTab == 4 ? 
+              <ArchiveHeader contract={header}> </ArchiveHeader> :
+              c.currentTab == 5 ? 
+              <CommissioningWorksHeader contract={header}> </CommissioningWorksHeader> :
+              <RowHeader contract={header}></RowHeader> 
+            }
+          </div>  
+              {c.searchedContracts && c.searchedContracts.map((contract, index) =>
+                (
+                  <div className='row'>
+                    {
+                      c.currentTab == 1 ? 
+                      <WorkPlanRowElement key={index} contract={contract}></WorkPlanRowElement> : 
+                      c.currentTab == 2 ?
+                      <UnpaidRowElement key={index} contract={contract}></UnpaidRowElement> : 
+                      c.currentTab == 3 ?
+                      <ArchiveElement key={index} contract={contract}></ArchiveElement> :
+                      c.currentTab == 4 ? 
+                      <ArchiveElement key={index} contract={contract}></ArchiveElement> :
+                      c.currentTab == 5 ?
+                      <CommissioningRowElement key={index} contract={contract}></CommissioningRowElement> :
+                      <RowElement key={index} contract={contract}></RowElement>
+                    }
+                  </div>
+                )
+              )}
+        </div>)
+      }
   </div>
   );
 }

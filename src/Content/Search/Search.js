@@ -132,16 +132,19 @@ function Search(){
             case 0:{
                 setPlaceholder("Поиск по номеру договора...");
                 setSearchItemIndex(index);
+                document.getElementById('searchButton').textContent = "Поиск по номеру договора";
                 break;
             }
             case 1:{
                 setPlaceholder("Поиск по наименованию заказчика...");
                 setSearchItemIndex(index);
+                document.getElementById('searchButton').textContent = "Поиск по заказчику";
                 break;
             }
             case 2:{
                 setPlaceholder("Поиск по наименованию договора...");
                 setSearchItemIndex(index);
+                document.getElementById('searchButton').textContent = "Поиск по договору";
                 break;
             }
         }
@@ -197,8 +200,8 @@ function Search(){
                 </Dropdown.Toggle>
                 <Dropdown.Menu id="drop-down-menu-items">
                     <Dropdown.Item id="drop-down-menu-item" type="button" onClick={() => onSelectedItem(0)}>по номеру договора</Dropdown.Item>
-                    <Dropdown.Item id="drop-down-menu-item" type="button" onClick={() => onSelectedItem(1)}>по наименованию заказчика</Dropdown.Item>
-                    <Dropdown.Item id="drop-down-menu-item" type="button" onClick={() => onSelectedItem(2)}>по наименованию договора</Dropdown.Item>
+                    <Dropdown.Item id="drop-down-menu-item" type="button" onClick={() => onSelectedItem(1)}>по заказчику</Dropdown.Item>
+                    <Dropdown.Item id="drop-down-menu-item" type="button" onClick={() => onSelectedItem(2)}>по договору</Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
         </div>
