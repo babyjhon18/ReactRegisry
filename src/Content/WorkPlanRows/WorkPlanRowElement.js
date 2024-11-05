@@ -13,6 +13,7 @@ import ContractsPayments from '../ContractPayments/ContractsPayments';
 import SignContract from "../SignContract/SignContract";
 import ReadyContract from "../ReadyContract/ReadyContract";
 import ManufacturerNotes from "../ManufacturerNotes/ManufacturerNotes"
+//docs for formulajs - https://formulajs.info/
 import * as formulajs from '@formulajs/formulajs'
 import { contains } from "rsuite/esm/DOMHelper";
 
